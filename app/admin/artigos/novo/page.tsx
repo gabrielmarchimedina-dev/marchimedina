@@ -1,0 +1,402 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+
+export default function NewArticlePage() {
+	const router = useRouter();
+	const [formData, setFormData] = useState({
+		title: "",
+		subtitle: "",
+		text: "",
+		active: true,
+	});
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [previewUrl, setPreviewUrl] = useState<string>("");
+	const [error, setError] = useState("");
+	const [loading, setLoading] = useState(false);
+
+	async function handleSubmit(e: React.FormEvent) {
+		e.preventDefault();
+		setError("");
+		setLoading(true);
+
+		try {
+			const submitFormData = new FormData();
+			submitFormData.append("title", formData.title);
+			submitFormData.append("subtitle", formData.subtitle);
+			submitFormData.append("text", formData.text);
+			submitFormData.append("active", formData.active ? "true" : "false");
+
+			if (selectedFile) {
+				submitFormData.append("file", selectedFile);
+			}
+
+			const response = await fetch("/api/v1/articles", {
+				method: "POST",
+				credentials: "include",
+				body: submitFormData,
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				setError(data.message || "Erro ao criar artigo");
+				setLoading(false);
+				return;
+			}
+
+			router.push("/admin/artigos");
+		} catch (err) {
+			setError("Erro ao conectar com o servidor");
+			setLoading(false);
+		}
+	}
+
+	function handleChange(
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+	) {
+		const { name, value } = e.target;
+		setFormData((prev) => ({
+			...prev,
+			[name]: value,
+		}));
+	}
+
+	function handleCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
+		setFormData((prev) => ({
+			...prev,
+			active: e.target.checked,
+		}));
+	}
+
+	function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+		const file = e.target.files?.[0];
+		if (file) {
+			setSelectedFile(file);
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setPreviewUrl(reader.result as string);
+			};
+			reader.readAsDataURL(file);
+		}
+	}
+
+	return (
+		<div>
+			<div style={{ marginBottom: "2rem" }}>
+				<Link
+					href="/admin/artigos"
+					style={{
+						color: "#d1d5db",
+						textDecoration: "none",
+						fontSize: "0.875rem",
+						display: "inline-flex",
+						alignItems: "center",
+						gap: "0.5rem",
+					}}
+				>
+					← Voltar para artigos
+				</Link>
+			</div>
+
+			<h1
+				style={{
+					fontSize: "1.875rem",
+					fontWeight: "600",
+					marginBottom: "2rem",
+				}}
+			>
+				Novo Artigo
+			</h1>
+
+			<div
+				style={{
+					background: "#1a1a1a",
+					border: "1px solid #333",
+					borderRadius: "8px",
+					padding: "3rem",
+				}}
+			>
+				<form onSubmit={handleSubmit}>
+					<div
+						style={{
+							display: "grid",
+							gridTemplateColumns: "1fr 1fr",
+							gap: "2rem",
+							marginBottom: "2rem",
+						}}
+					>
+						<div>
+							<label
+								htmlFor="title"
+								style={{
+									display: "block",
+									marginBottom: "0.5rem",
+									fontSize: "0.875rem",
+									color: "#d1d5db",
+									fontWeight: "500",
+								}}
+							>
+								Título *
+							</label>
+							<input
+								id="title"
+								name="title"
+								type="text"
+								value={formData.title}
+								onChange={handleChange}
+								required
+								style={{
+									width: "100%",
+									padding: "0.75rem",
+									background: "#0a0a0a",
+									border: "1px solid #333",
+									borderRadius: "6px",
+									color: "#ededed",
+									fontSize: "1rem",
+									outline: "none",
+									transition: "border-color 0.2s",
+								}}
+								onFocus={(e) =>
+									(e.target.style.borderColor = "#d4af37")
+								}
+								onBlur={(e) =>
+									(e.target.style.borderColor = "#333")
+								}
+							/>
+						</div>
+
+						<div>
+							<label
+								htmlFor="subtitle"
+								style={{
+									display: "block",
+									marginBottom: "0.5rem",
+									fontSize: "0.875rem",
+									color: "#d1d5db",
+									fontWeight: "500",
+								}}
+							>
+								Subtítulo *
+							</label>
+							<input
+								id="subtitle"
+								name="subtitle"
+								type="text"
+								value={formData.subtitle}
+								onChange={handleChange}
+								required
+								style={{
+									width: "100%",
+									padding: "0.75rem",
+									background: "#0a0a0a",
+									border: "1px solid #333",
+									borderRadius: "6px",
+									color: "#ededed",
+									fontSize: "1rem",
+									outline: "none",
+									transition: "border-color 0.2s",
+								}}
+								onFocus={(e) =>
+									(e.target.style.borderColor = "#d4af37")
+								}
+								onBlur={(e) =>
+									(e.target.style.borderColor = "#333")
+								}
+							/>
+						</div>
+					</div>
+
+					<div style={{ marginBottom: "2rem" }}>
+						<label
+							htmlFor="text"
+							style={{
+								display: "block",
+								marginBottom: "0.5rem",
+								fontSize: "0.875rem",
+								color: "#d1d5db",
+								fontWeight: "500",
+							}}
+						>
+							Texto *
+						</label>
+						<textarea
+							id="text"
+							name="text"
+							value={formData.text}
+							onChange={handleChange}
+							required
+							rows={8}
+							style={{
+								width: "100%",
+								padding: "0.75rem",
+								background: "#0a0a0a",
+								border: "1px solid #333",
+								borderRadius: "6px",
+								color: "#ededed",
+								fontSize: "1rem",
+								outline: "none",
+								transition: "border-color 0.2s",
+								resize: "vertical",
+								fontFamily: "inherit",
+							}}
+							onFocus={(e) =>
+								(e.target.style.borderColor = "#d4af37")
+							}
+							onBlur={(e) =>
+								(e.target.style.borderColor = "#333")
+							}
+						/>
+					</div>
+
+					<div style={{ marginBottom: "2rem" }}>
+						<label
+							htmlFor="active"
+							style={{
+								display: "flex",
+								alignItems: "center",
+								gap: "0.75rem",
+								fontSize: "0.875rem",
+								color: "#d1d5db",
+								fontWeight: "500",
+							}}
+						>
+							<input
+								id="active"
+								name="active"
+								type="checkbox"
+								checked={formData.active}
+								onChange={handleCheckboxChange}
+								style={{
+									width: "16px",
+									height: "16px",
+									accentColor: "#d4af37",
+								}}
+							/>
+							Ativo
+						</label>
+					</div>
+
+					<div style={{ marginBottom: "2rem" }}>
+						<label
+							htmlFor="thumbnail"
+							style={{
+								display: "block",
+								marginBottom: "0.5rem",
+								fontSize: "0.875rem",
+								color: "#d1d5db",
+								fontWeight: "500",
+							}}
+						>
+							Thumbnail *
+						</label>
+						<input
+							id="thumbnail"
+							name="thumbnail"
+							type="file"
+							accept="image/*"
+							onChange={handleFileChange}
+							required
+							style={{
+								width: "100%",
+								padding: "0.75rem",
+								background: "#0a0a0a",
+								border: "1px solid #333",
+								borderRadius: "6px",
+								color: "#ededed",
+								fontSize: "1rem",
+								outline: "none",
+							}}
+						/>
+						{previewUrl && (
+							<div style={{ marginTop: "1rem" }}>
+								<Image
+									src={previewUrl}
+									alt="Preview"
+									width={240}
+									height={180}
+									style={{
+										maxWidth: "240px",
+										maxHeight: "180px",
+										borderRadius: "8px",
+										border: "1px solid #333",
+										objectFit: "cover",
+									}}
+								/>
+							</div>
+						)}
+					</div>
+
+					{error && (
+						<div
+							style={{
+								marginBottom: "1.5rem",
+								padding: "0.75rem",
+								background: "#3f1515",
+								border: "1px solid #7f1d1d",
+								borderRadius: "6px",
+								color: "#fca5a5",
+								fontSize: "0.875rem",
+							}}
+						>
+							{error}
+						</div>
+					)}
+
+					<div
+						style={{
+							display: "flex",
+							gap: "1rem",
+							justifyContent: "flex-end",
+						}}
+					>
+						<Link
+							href="/admin/artigos"
+							style={{
+								padding: "0.75rem 1.5rem",
+								background: "transparent",
+								border: "1px solid #333",
+								borderRadius: "6px",
+								color: "#ededed",
+								textDecoration: "none",
+								fontWeight: "500",
+								display: "inline-block",
+							}}
+						>
+							Cancelar
+						</Link>
+						<button
+							type="submit"
+							disabled={loading}
+							style={{
+								padding: "0.75rem 1.5rem",
+								background: loading ? "#555" : "#d4af37",
+								color: loading ? "#999" : "#0a0a0a",
+								border: "none",
+								borderRadius: "6px",
+								fontWeight: "600",
+								cursor: loading ? "not-allowed" : "pointer",
+								transition: "background 0.2s",
+							}}
+							onMouseEnter={(e) => {
+								if (!loading)
+									e.currentTarget.style.background =
+										"#b8860b";
+							}}
+							onMouseLeave={(e) => {
+								if (!loading)
+									e.currentTarget.style.background =
+										"#d4af37";
+							}}
+						>
+							{loading ? "Criando..." : "Criar Artigo"}
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	);
+}
