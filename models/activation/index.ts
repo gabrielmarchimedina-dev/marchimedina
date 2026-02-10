@@ -75,8 +75,11 @@ async function sendEmailToUser(
 	user: PublicUserRecord,
 	activationToken: UserActivationRecord,
 ): Promise<void> {
+	const fromEmail =
+		process.env.EMAIL_FROM || "MarchiMedina <contato@marchimedina.com.br>";
+
 	await email.send({
-		from: "MarchiMedina <contato@marchimedina.com.br>",
+		from: fromEmail,
 		to: `${user.email}`,
 		subject: "Finalize seu cadastro no MarchiMedina",
 		text: `${user.name}, clique no link abaixo para finalizar seu cadastro no Marchi Medina.
