@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useScrollAnimation } from "@/hooks/client/useScrollAnimation";
 import { FaInstagram, FaLinkedin } from "react-icons/fa";
 import Image from "next/image";
+import { getImageSrc } from "@/lib/imageUrl";
 
 type TeamMember = {
 	id: string;
@@ -103,9 +104,7 @@ export default function AboutSection() {
 							>
 								<div className="relative h-64 w-full overflow-hidden">
 									<Image
-										src={`/${member.image_url}`}
-										alt={member.name}
-										fill
+										src={getImageSrc(member.image_url)}
 										className="object-cover transition-transform duration-300 group-hover:scale-105"
 									/>
 								</div>
@@ -170,7 +169,9 @@ export default function AboutSection() {
 							<div className="flex items-center gap-4">
 								<div className="relative h-16 w-16 overflow-hidden rounded-full border border-white/10">
 									<Image
-										src={`/${selectedMember.image_url}`}
+										src={getImageSrc(
+											selectedMember.image_url,
+										)}
 										alt={selectedMember.name}
 										fill
 										className="object-cover"
