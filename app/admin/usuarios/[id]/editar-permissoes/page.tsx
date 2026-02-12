@@ -26,7 +26,15 @@ const ALL_FEATURES = [
 	"update:user:password",
 	"update:user:features",
 	"read:team_member",
+	"read:inactive:team_member",
 	"create:team_member",
+	"update:team_member",
+	"delete:team_member",
+	"read:article",
+	"read:inactive:article",
+	"create:article",
+	"update:article",
+	"delete:article",
 	"read:activation_token",
 ];
 
@@ -41,6 +49,7 @@ const DEFAULT_USER_FEATURES = [
 	"update:user:self",
 	"update:user:password",
 	"read:team_member",
+	"read:article",
 ];
 
 // Permissões anônimas (não editáveis)
@@ -48,21 +57,41 @@ const ANONYMOUS_FEATURES = [
 	"read:activation_token",
 	"create:session",
 	"read:team_member",
+	"read:article",
 ];
 
-// Permissões extras que podem ser adicionadas/removidas
-const EDITABLE_FEATURES = ALL_FEATURES.filter(
+// Permissões extras que podem ser adicionadas/removidas (ordenadas, update:user:features no fim)
+const EDITABLE_FEATURES_UNSORTED = ALL_FEATURES.filter(
 	(feature) =>
 		!DEFAULT_USER_FEATURES.includes(feature) &&
 		!ANONYMOUS_FEATURES.includes(feature),
 );
 
+const EDITABLE_FEATURES = [
+	...EDITABLE_FEATURES_UNSORTED.filter((f) => f !== "update:user:features"),
+	...(EDITABLE_FEATURES_UNSORTED.includes("update:user:features")
+		? ["update:user:features"]
+		: []),
+];
+
+// Permissões que o "Tornar Gerente" adiciona automaticamente
+const MANAGER_EXTRA_FEATURES = EDITABLE_FEATURES.filter(
+	(f) => f !== "update:user:features",
+);
+
 const FEATURE_LABELS: Record<string, string> = {
-	"read:user:other": "Ler dados de outros usuários",
+	"read:user:other": "Ver dados de outros usuários",
 	"create:user": "Criar novos usuários",
 	"update:user:other": "Editar outros usuários",
-	"update:user:features": "Gerenciar permissões de usuários (Gerente)",
+	"read:inactive:team_member": "Ver membros da equipe inativos",
 	"create:team_member": "Criar membros da equipe",
+	"update:team_member": "Editar membros da equipe",
+	"delete:team_member": "Desativar membros da equipe",
+	"read:inactive:article": "Ver artigos inativos",
+	"create:article": "Criar artigos",
+	"update:article": "Editar artigos",
+	"delete:article": "Desativar artigos",
+	"update:user:features": "Tornar Gerente (inclui todas as permissões acima)",
 };
 
 export default function EditUserPermissionsPage() {
@@ -107,8 +136,16 @@ export default function EditUserPermissionsPage() {
 	function handleToggleFeature(feature: string) {
 		setSelectedFeatures((prev) => {
 			if (prev.includes(feature)) {
+				// Se desmarcar "Tornar Gerente", apenas remove ele
+				if (feature === "update:user:features") {
+					return prev.filter((f) => f !== feature);
+				}
 				return prev.filter((f) => f !== feature);
 			} else {
+				// Se marcar "Tornar Gerente", marca todas as outras também
+				if (feature === "update:user:features") {
+					return [...new Set([...prev, ...EDITABLE_FEATURES])];
+				}
 				return [...prev, feature];
 			}
 		});

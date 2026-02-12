@@ -75,8 +75,8 @@ describe("DELETE /api/v1/articles/[id]", () => {
 
 			const articleRecord = await orchestrator.createArticle();
 
-			// Verifica que o artigo não está deletado
-			expect(articleRecord.deleted_at).toBeNull();
+			// Verifica que o artigo está ativo antes
+			expect(articleRecord.active).toBe(true);
 
 			const response = await fetch(
 				`http://localhost:3000/api/v1/articles/${articleRecord.id}`,
@@ -94,20 +94,19 @@ describe("DELETE /api/v1/articles/[id]", () => {
 
 			expect(responseBody.id).toBe(articleRecord.id);
 			expect(responseBody.title).toBe(articleRecord.title);
-			expect(responseBody.deleted_at).not.toBeNull();
-			expect(responseBody.deleted_by).toBe(manager.id);
+			expect(responseBody.active).toBe(false);
 			expect(uuidVersion(responseBody.id)).toBe(4);
 			expect(Date.parse(responseBody.created_at)).not.toBeNaN();
 			expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
-			expect(Date.parse(responseBody.deleted_at)).not.toBeNaN();
+			expect(responseBody.updated_at).not.toBe(responseBody.created_at);
 		});
 
-		test("Deleting already deleted article should return 404", async () => {
+		test("Deleting already inactive article", async () => {
 			const errorResponse = {
-				name: "NotFoundError",
-				message: "Artigo não encontrado.",
-				action: "Veririfique se os parâmetros utilizados na busca estão corretos.",
-				status_code: 404,
+				name: "ValidationError",
+				message: "Este artigo já está inativo.",
+				action: "Verifique se o artigo selecionado está ativo antes de desativá-lo.",
+				status_code: 400,
 			};
 
 			const manager = await orchestrator.createManagerUser();
@@ -115,7 +114,7 @@ describe("DELETE /api/v1/articles/[id]", () => {
 
 			const articleRecord = await orchestrator.createArticle();
 
-			// Primeira deleção
+			// Primeira desativação
 			await fetch(
 				`http://localhost:3000/api/v1/articles/${articleRecord.id}`,
 				{
@@ -126,7 +125,7 @@ describe("DELETE /api/v1/articles/[id]", () => {
 				},
 			);
 
-			// Tenta deletar novamente
+			// Tenta desativar novamente
 			const response = await fetch(
 				`http://localhost:3000/api/v1/articles/${articleRecord.id}`,
 				{
@@ -137,7 +136,7 @@ describe("DELETE /api/v1/articles/[id]", () => {
 				},
 			);
 
-			expect(response.status).toBe(404);
+			expect(response.status).toBe(400);
 
 			const responseBody = await response.json();
 
@@ -182,8 +181,8 @@ describe("DELETE /api/v1/articles/[id]", () => {
 
 			const articleRecord = await orchestrator.createArticle();
 
-			// Verifica que o artigo não está deletado
-			expect(articleRecord.deleted_at).toBeNull();
+			// Verifica que o artigo está ativo antes
+			expect(articleRecord.active).toBe(true);
 
 			const response = await fetch(
 				`http://localhost:3000/api/v1/articles/${articleRecord.id}`,
@@ -201,12 +200,11 @@ describe("DELETE /api/v1/articles/[id]", () => {
 
 			expect(responseBody.id).toBe(articleRecord.id);
 			expect(responseBody.title).toBe(articleRecord.title);
-			expect(responseBody.deleted_at).not.toBeNull();
-			expect(responseBody.deleted_by).toBe(admin.id);
+			expect(responseBody.active).toBe(false);
 			expect(uuidVersion(responseBody.id)).toBe(4);
 			expect(Date.parse(responseBody.created_at)).not.toBeNaN();
 			expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
-			expect(Date.parse(responseBody.deleted_at)).not.toBeNaN();
+			expect(responseBody.updated_at).not.toBe(responseBody.created_at);
 		});
 
 		test("Deleting article with non-existing ID", async () => {

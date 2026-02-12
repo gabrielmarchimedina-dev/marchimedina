@@ -2,15 +2,18 @@ import database from "infra/database";
 import { NotFoundError, ValidationError } from "infra/errors";
 import { ArticleRecord, CreateArticleInput, UpdateArticleInput } from "./types";
 
-async function findAll(): Promise<ArticleRecord[]> {
+async function findAll(options?: {
+	includeInactive?: boolean;
+}): Promise<ArticleRecord[]> {
+	const includeInactive = options?.includeInactive ?? false;
+
 	const results = await database.query({
 		text: `
 			SELECT
 				*
 			FROM
 				article
-			WHERE
-				deleted_at IS NULL
+			${includeInactive ? "" : "WHERE active = true"}
 			ORDER BY
 				created_at DESC
 			;`,
@@ -211,23 +214,26 @@ async function update(
 	}
 }
 
-async function softDelete(
-	articleId: string,
-	deletedBy: string | null,
-): Promise<ArticleRecord> {
-	await findOneById(articleId);
+async function deactivate(articleId: string): Promise<ArticleRecord> {
+	const existingArticle = await findOneById(articleId);
+
+	if (!existingArticle.active) {
+		throw new ValidationError({
+			message: "Este artigo já está inativo.",
+			action: "Verifique se o artigo selecionado está ativo antes de desativá-lo.",
+		});
+	}
 
 	const results = await database.query({
 		text: `
 			UPDATE article
 			SET 
-				deleted_at = NOW(),
-				deleted_by = $2,
+				active = false,
 				updated_at = NOW()
 			WHERE id = $1
 			RETURNING *
 		;`,
-		values: [articleId, deletedBy],
+		values: [articleId],
 	});
 
 	return results.rows[0];
@@ -238,7 +244,7 @@ const article = {
 	findOneById,
 	create,
 	update,
-	softDelete,
+	deactivate,
 };
 
 export default article;

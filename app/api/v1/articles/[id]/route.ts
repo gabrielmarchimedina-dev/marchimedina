@@ -145,9 +145,8 @@ export const DELETE = controller.withAuth(FEATURES.LIST.DELETE_ARTICLE)(async (
 	{ params }: { params: Promise<{ id: string }> },
 ) => {
 	const { id: articleId } = await params;
-	const deletedBy = request.user?.id ?? null;
-	const deletedArticle = await article.softDelete(articleId, deletedBy);
-	return NextResponse.json(deletedArticle, { status: 200 });
+	const deactivatedArticle = await article.deactivate(articleId);
+	return NextResponse.json(deactivatedArticle, { status: 200 });
 });
 
 const notAllowed = () => methodNotAllowed(["GET", "PATCH", "DELETE"]);

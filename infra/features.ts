@@ -21,12 +21,14 @@ const LIST = {
 
 	// Team Members
 	READ_TEAM_MEMBER: "read:team_member",
+	READ_INACTIVE_TEAM_MEMBER: "read:inactive:team_member",
 	CREATE_TEAM_MEMBER: "create:team_member",
 	UPDATE_TEAM_MEMBER: "update:team_member",
 	DELETE_TEAM_MEMBER: "delete:team_member",
 
 	// Articles
 	READ_ARTICLE: "read:article",
+	READ_INACTIVE_ARTICLE: "read:inactive:article",
 	CREATE_ARTICLE: "create:article",
 	UPDATE_ARTICLE: "update:article",
 	DELETE_ARTICLE: "delete:article",
@@ -60,9 +62,11 @@ const MANAGER_USER_FEATURES = [
 	LIST.READ_USER_OTHER,
 	LIST.CREATE_USER,
 	LIST.UPDATE_USER_OTHER,
+	LIST.READ_INACTIVE_TEAM_MEMBER,
 	LIST.CREATE_TEAM_MEMBER,
 	LIST.UPDATE_TEAM_MEMBER,
 	LIST.DELETE_TEAM_MEMBER,
+	LIST.READ_INACTIVE_ARTICLE,
 	LIST.CREATE_ARTICLE,
 	LIST.UPDATE_ARTICLE,
 	LIST.DELETE_ARTICLE,

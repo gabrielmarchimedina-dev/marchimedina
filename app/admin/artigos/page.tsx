@@ -23,6 +23,7 @@ type ConfirmModalProps = {
 	onConfirm: () => void;
 	onCancel: () => void;
 	isLoading?: boolean;
+	error?: string | null;
 };
 
 function ConfirmModal({
@@ -34,6 +35,7 @@ function ConfirmModal({
 	onConfirm,
 	onCancel,
 	isLoading = false,
+	error = null,
 }: ConfirmModalProps) {
 	if (!isOpen) return null;
 
@@ -86,6 +88,22 @@ function ConfirmModal({
 					{message}
 				</p>
 
+				{error && (
+					<div
+						style={{
+							background: "#7f1d1d",
+							border: "1px solid #dc2626",
+							borderRadius: "6px",
+							padding: "0.75rem 1rem",
+							marginBottom: "1rem",
+							color: "#fca5a5",
+							fontSize: "0.875rem",
+						}}
+					>
+						{error}
+					</div>
+				)}
+
 				<div
 					style={{
 						display: "flex",
@@ -124,7 +142,7 @@ function ConfirmModal({
 							opacity: isLoading ? 0.7 : 1,
 						}}
 					>
-						{isLoading ? "Excluindo..." : confirmText}
+						{isLoading ? "Desativando..." : confirmText}
 					</button>
 				</div>
 			</div>
@@ -139,6 +157,7 @@ export default function ArticlesPage() {
 	const [articleToDelete, setArticleToDelete] = useState<Article | null>(
 		null,
 	);
+	const [deleteError, setDeleteError] = useState<string | null>(null);
 
 	useEffect(() => {
 		fetchArticles();
@@ -167,6 +186,7 @@ export default function ArticlesPage() {
 	function closeDeleteModal() {
 		if (!deletingId) {
 			setArticleToDelete(null);
+			setDeleteError(null);
 		}
 	}
 
@@ -186,16 +206,21 @@ export default function ArticlesPage() {
 
 			if (response.ok) {
 				setArticles((prev) =>
-					prev.filter((a) => a.id !== articleToDelete.id),
+					prev.map((a) =>
+						a.id === articleToDelete.id
+							? { ...a, active: false }
+							: a,
+					),
 				);
 				setArticleToDelete(null);
+				setDeleteError(null);
 			} else {
 				const error = await response.json();
-				alert(error.message || "Erro ao excluir artigo");
+				setDeleteError(error.message || "Erro ao desativar artigo");
 			}
 		} catch (error) {
-			console.error("Erro ao excluir artigo:", error);
-			alert("Erro ao excluir artigo");
+			console.error("Erro ao desativar artigo:", error);
+			setDeleteError("Erro ao desativar artigo");
 		} finally {
 			setDeletingId(null);
 		}
@@ -393,22 +418,18 @@ export default function ArticlesPage() {
 										>
 											<span
 												style={{
-													display: "inline-flex",
-													alignItems: "center",
-													gap: "0.5rem",
 													padding: "0.25rem 0.75rem",
 													borderRadius: "9999px",
-													fontSize: "0.875rem",
+													fontSize: "0.75rem",
 													fontWeight: "500",
 													background: item.active
-														? "#15803d"
-														: "#854d0e",
+														? "#14532d"
+														: "#7f1d1d",
 													color: item.active
 														? "#86efac"
-														: "#fde047",
+														: "#fca5a5",
 												}}
 											>
-												{item.active ? "✓" : "○"}{" "}
 												{item.active
 													? "Ativo"
 													: "Inativo"}
@@ -451,22 +472,29 @@ export default function ArticlesPage() {
 													openDeleteModal(item)
 												}
 												disabled={
+													!item.active ||
 													deletingId === item.id
 												}
 												style={{
 													padding: "0.5rem 1rem",
 													background: "transparent",
-													border: "1px solid #7f1d1d",
+													border: item.active
+														? "1px solid #7f1d1d"
+														: "1px solid #333",
 													borderRadius: "4px",
-													color: "#fca5a5",
-													cursor: "pointer",
+													color: item.active
+														? "#fca5a5"
+														: "#666",
+													cursor: item.active
+														? "pointer"
+														: "not-allowed",
 													opacity:
 														deletingId === item.id
 															? 0.5
 															: 1,
 												}}
 											>
-												Excluir
+												Desativar
 											</button>
 										</td>
 									</tr>
@@ -479,13 +507,14 @@ export default function ArticlesPage() {
 
 			<ConfirmModal
 				isOpen={articleToDelete !== null}
-				title="Excluir artigo"
-				message={`Tem certeza que deseja excluir "${articleToDelete?.title}"? Esta ação não pode ser desfeita.`}
-				confirmText="Excluir"
+				title="Desativar artigo"
+				message={`Tem certeza que deseja desativar "${articleToDelete?.title}"? O artigo não aparecerá mais no site público.`}
+				confirmText="Desativar"
 				cancelText="Cancelar"
 				onConfirm={handleConfirmDelete}
 				onCancel={closeDeleteModal}
 				isLoading={deletingId !== null}
+				error={deleteError}
 			/>
 		</div>
 	);
