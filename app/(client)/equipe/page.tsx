@@ -105,6 +105,8 @@ export default function AboutSection() {
 								<div className="relative h-64 w-full overflow-hidden">
 									<Image
 										src={getImageSrc(member.image_url)}
+										alt={member.name}
+										fill
 										className="object-cover transition-transform duration-300 group-hover:scale-105"
 									/>
 								</div>
