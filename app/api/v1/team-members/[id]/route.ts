@@ -107,5 +107,18 @@ export const PATCH = controller.withAuth(FEATURES.LIST.UPDATE_TEAM_MEMBER)(
 	},
 );
 
-const notAllowed = () => methodNotAllowed(["GET", "PATCH"]);
-export { notAllowed as POST, notAllowed as PUT, notAllowed as DELETE };
+export const DELETE = controller.withAuth(FEATURES.LIST.DELETE_TEAM_MEMBER)(
+	async (
+		request: NextRequest,
+		{ params }: { params: Promise<{ id: string }> },
+	) => {
+		const { id: memberId } = await params;
+		const deactivatedMember = await teamMember.deactivate(memberId);
+		const response = NextResponse.json(deactivatedMember, { status: 200 });
+
+		return response;
+	},
+);
+
+const notAllowed = () => methodNotAllowed(["GET", "PATCH", "DELETE"]);
+export { notAllowed as POST, notAllowed as PUT };
