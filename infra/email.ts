@@ -11,11 +11,23 @@ const transporter = nodemailer.createTransport({
 });
 
 async function send(mailOptions: MailOptions) {
+	console.log("[EMAIL] Tentando enviar email para:", mailOptions.to);
+
 	try {
-		await transporter.sendMail(mailOptions);
-	} catch (error) {
-		console.error("Erro ao enviar email:", error);
-		console.error("Config SMTP:", {
+		const result = await transporter.sendMail(mailOptions);
+		console.log("[EMAIL] Enviado com sucesso:", {
+			messageId: result.messageId,
+			accepted: result.accepted,
+			rejected: result.rejected,
+		});
+	} catch (error: any) {
+		console.error("[EMAIL] Falha ao enviar:", {
+			errorMessage: error?.message,
+			errorCode: error?.code,
+			errorResponse: error?.response,
+			responseCode: error?.responseCode,
+		});
+		console.error("[EMAIL] Config SMTP:", {
 			host: process.env.EMAIL_SMTP_HOST,
 			port: process.env.EMAIL_SMTP_PORT,
 			user: process.env.EMAIL_SMTP_USER,
