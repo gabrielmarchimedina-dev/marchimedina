@@ -317,6 +317,31 @@ async function update(
 	}
 }
 
+async function deactivate(memberId: string): Promise<TeamMemberRecord> {
+	const existingMember = await findOneById(memberId);
+
+	if (!existingMember.active) {
+		throw new ValidationError({
+			message: "Este membro da equipe já está inativo.",
+			action: "Verifique se o membro selecionado está ativo antes de desativá-lo.",
+		});
+	}
+
+	const results = await database.query({
+		text: `
+			UPDATE team_members
+			SET 
+				active = false,
+				updated_at = NOW()
+			WHERE id = $1
+			RETURNING *
+			;`,
+		values: [memberId],
+	});
+
+	return results.rows[0];
+}
+
 async function findImageUsageCount(imageUrl: string): Promise<number> {
 	const results = await database.query({
 		text: `
@@ -338,6 +363,7 @@ const teamMember = {
 	findOneById,
 	create,
 	update,
+	deactivate,
 	findImageUsageCount,
 };
 export default teamMember;
