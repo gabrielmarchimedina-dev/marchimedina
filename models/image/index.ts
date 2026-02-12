@@ -1,5 +1,6 @@
 import { writeFile, mkdir, unlink } from "fs/promises";
 import path from "path";
+import { put, del } from "@vercel/blob";
 import webserver from "infra/webserver";
 import { UploadResult, UploadOptions } from "./types";
 
@@ -10,6 +11,10 @@ const DEFAULT_ALLOWED_TYPES = [
 	"image/png",
 	"image/webp",
 ];
+
+function isProduction(): boolean {
+	return process.env.NODE_ENV === "production";
+}
 
 async function uploadFile(
 	file: File,
@@ -29,6 +34,38 @@ async function uploadFile(
 	const filename = `${timestamp}${extension}`;
 
 	const subDir = getSubDirectory(entityType);
+
+	if (isProduction()) {
+		return await uploadToVercelBlob(file, subDir, filename);
+	} else {
+		return await uploadToLocalDisk(file, subDir, filename);
+	}
+}
+
+async function uploadToVercelBlob(
+	file: File,
+	subDir: string,
+	filename: string,
+): Promise<UploadResult> {
+	const blobPath = `${subDir}/${filename}`;
+
+	const blob = await put(blobPath, file, {
+		access: "public",
+		addRandomSuffix: false,
+	});
+
+	return {
+		filename,
+		path: blob.url,
+		url: blob.url,
+	};
+}
+
+async function uploadToLocalDisk(
+	file: File,
+	subDir: string,
+	filename: string,
+): Promise<UploadResult> {
 	const relativePath = `${subDir}/${filename}`;
 
 	await saveFileToDisk(file, subDir, filename);
@@ -40,7 +77,24 @@ async function uploadFile(
 	};
 }
 
-async function deleteFile(relativePath: string): Promise<void> {
+async function deleteFile(filePathOrUrl: string): Promise<void> {
+	if (isProduction()) {
+		await deleteFromVercelBlob(filePathOrUrl);
+	} else {
+		await deleteFromLocalDisk(filePathOrUrl);
+	}
+}
+
+async function deleteFromVercelBlob(blobUrl: string): Promise<void> {
+	try {
+		await del(blobUrl);
+	} catch (error) {
+		console.error("Erro ao deletar arquivo do Vercel Blob:", error);
+		throw new Error("Não foi possível deletar o arquivo");
+	}
+}
+
+async function deleteFromLocalDisk(relativePath: string): Promise<void> {
 	const filePath = path.join(process.cwd(), "public", relativePath);
 
 	try {

@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
 	host: process.env.EMAIL_SMTP_HOST,
-	port: parseInt(process.env.EMAIL_SMTP_PORT),
+	port: parseInt(process.env.EMAIL_SMTP_PORT || "465"),
 	auth: {
 		user: process.env.EMAIL_SMTP_USER,
 		pass: process.env.EMAIL_SMTP_PASSWORD,
@@ -11,7 +11,31 @@ const transporter = nodemailer.createTransport({
 });
 
 async function send(mailOptions: MailOptions) {
-	await transporter.sendMail(mailOptions);
+	console.log("[EMAIL] Tentando enviar email para:", mailOptions.to);
+
+	try {
+		const result = await transporter.sendMail(mailOptions);
+		console.log("[EMAIL] Enviado com sucesso:", {
+			messageId: result.messageId,
+			accepted: result.accepted,
+			rejected: result.rejected,
+		});
+	} catch (error: any) {
+		console.error("[EMAIL] Falha ao enviar:", {
+			errorMessage: error?.message,
+			errorCode: error?.code,
+			errorResponse: error?.response,
+			responseCode: error?.responseCode,
+		});
+		console.error("[EMAIL] Config SMTP:", {
+			host: process.env.EMAIL_SMTP_HOST,
+			port: process.env.EMAIL_SMTP_PORT,
+			user: process.env.EMAIL_SMTP_USER,
+			from: mailOptions.from,
+			to: mailOptions.to,
+		});
+		throw error;
+	}
 }
 
 type MailOptions = {

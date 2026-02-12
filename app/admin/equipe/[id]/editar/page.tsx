@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { getImageSrc } from "@/lib/imageUrl";
 
 type TeamMember = {
 	id: string;
@@ -223,7 +224,7 @@ export default function EditTeamMemberPage() {
 						</label>
 						<div style={{ marginBottom: "1rem" }}>
 							<Image
-								src={`/${formData.image_url}`}
+								src={getImageSrc(formData.image_url)}
 								alt="Foto atual"
 								width={120}
 								height={120}

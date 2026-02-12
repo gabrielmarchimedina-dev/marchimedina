@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { getImageSrc } from "@/lib/imageUrl";
 
 type TeamMember = {
 	id: string;
@@ -115,7 +116,7 @@ export default function ViewTeamMemberPage() {
 				{member.image_url && (
 					<div style={{ marginBottom: "1.5rem" }}>
 						<Image
-							src={`/${member.image_url}`}
+							src={getImageSrc(member.image_url)}
 							alt={member.name}
 							width={120}
 							height={120}
