@@ -81,11 +81,19 @@ export default function ViewUserPage() {
 	);
 
 	const FEATURE_LABELS: Record<string, string> = {
-		"read:user:other": "Ler dados de outros usuários",
+		"read:user:other": "Ver dados de outros usuários",
 		"create:user": "Criar novos usuários",
 		"update:user:other": "Editar outros usuários",
-		"update:user:features": "Gerenciar permissões de usuários (Gerente)",
+		"read:inactive:team_member": "Ver membros da equipe inativos",
 		"create:team_member": "Criar membros da equipe",
+		"update:team_member": "Editar membros da equipe",
+		"delete:team_member": "Desativar membros da equipe",
+		"read:inactive:article": "Ver artigos inativos",
+		"create:article": "Criar artigos",
+		"update:article": "Editar artigos",
+		"delete:article": "Desativar artigos",
+		"update:user:features":
+			"Tornar Gerente (inclui todas as permissões acima)",
 		"is:admin": "Administrador",
 	};
 
