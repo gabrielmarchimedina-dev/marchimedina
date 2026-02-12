@@ -14,29 +14,192 @@ type Article = {
 	created_at: string;
 };
 
+type ConfirmModalProps = {
+	isOpen: boolean;
+	title: string;
+	message: string;
+	confirmText?: string;
+	cancelText?: string;
+	onConfirm: () => void;
+	onCancel: () => void;
+	isLoading?: boolean;
+};
+
+function ConfirmModal({
+	isOpen,
+	title,
+	message,
+	confirmText = "Confirmar",
+	cancelText = "Cancelar",
+	onConfirm,
+	onCancel,
+	isLoading = false,
+}: ConfirmModalProps) {
+	if (!isOpen) return null;
+
+	return (
+		<div
+			style={{
+				position: "fixed",
+				top: 0,
+				left: 0,
+				right: 0,
+				bottom: 0,
+				backgroundColor: "rgba(0, 0, 0, 0.7)",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				zIndex: 1000,
+			}}
+			onClick={onCancel}
+		>
+			<div
+				style={{
+					background: "#1a1a1a",
+					border: "1px solid #333",
+					borderRadius: "12px",
+					padding: "2rem",
+					maxWidth: "400px",
+					width: "90%",
+					boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5)",
+				}}
+				onClick={(e) => e.stopPropagation()}
+			>
+				<h3
+					style={{
+						fontSize: "1.25rem",
+						fontWeight: "600",
+						color: "#ededed",
+						marginBottom: "1rem",
+					}}
+				>
+					{title}
+				</h3>
+
+				<p
+					style={{
+						color: "#d1d5db",
+						marginBottom: "1.5rem",
+						lineHeight: "1.5",
+					}}
+				>
+					{message}
+				</p>
+
+				<div
+					style={{
+						display: "flex",
+						gap: "0.75rem",
+						justifyContent: "flex-end",
+					}}
+				>
+					<button
+						onClick={onCancel}
+						disabled={isLoading}
+						style={{
+							padding: "0.75rem 1.5rem",
+							background: "transparent",
+							border: "1px solid #333",
+							borderRadius: "6px",
+							color: "#ededed",
+							cursor: isLoading ? "not-allowed" : "pointer",
+							fontWeight: "500",
+							transition: "all 0.2s",
+						}}
+					>
+						{cancelText}
+					</button>
+					<button
+						onClick={onConfirm}
+						disabled={isLoading}
+						style={{
+							padding: "0.75rem 1.5rem",
+							background: "#7f1d1d",
+							border: "none",
+							borderRadius: "6px",
+							color: "#fca5a5",
+							cursor: isLoading ? "not-allowed" : "pointer",
+							fontWeight: "600",
+							transition: "all 0.2s",
+							opacity: isLoading ? 0.7 : 1,
+						}}
+					>
+						{isLoading ? "Excluindo..." : confirmText}
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+}
+
 export default function ArticlesPage() {
 	const [articles, setArticles] = useState<Article[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [deletingId, setDeletingId] = useState<string | null>(null);
+	const [articleToDelete, setArticleToDelete] = useState<Article | null>(
+		null,
+	);
 
 	useEffect(() => {
-		async function fetchArticles() {
-			try {
-				const response = await fetch("/api/v1/articles", {
-					credentials: "include",
-				});
-				if (response.ok) {
-					const data = await response.json();
-					setArticles(data);
-				}
-			} catch (error) {
-				console.error("Erro ao buscar artigos:", error);
-			} finally {
-				setLoading(false);
-			}
-		}
-
 		fetchArticles();
 	}, []);
+
+	async function fetchArticles() {
+		try {
+			const response = await fetch("/api/v1/articles", {
+				credentials: "include",
+			});
+			if (response.ok) {
+				const data = await response.json();
+				setArticles(data);
+			}
+		} catch (error) {
+			console.error("Erro ao buscar artigos:", error);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	function openDeleteModal(article: Article) {
+		setArticleToDelete(article);
+	}
+
+	function closeDeleteModal() {
+		if (!deletingId) {
+			setArticleToDelete(null);
+		}
+	}
+
+	async function handleConfirmDelete() {
+		if (!articleToDelete) return;
+
+		setDeletingId(articleToDelete.id);
+
+		try {
+			const response = await fetch(
+				`/api/v1/articles/${articleToDelete.id}`,
+				{
+					method: "DELETE",
+					credentials: "include",
+				},
+			);
+
+			if (response.ok) {
+				setArticles((prev) =>
+					prev.filter((a) => a.id !== articleToDelete.id),
+				);
+				setArticleToDelete(null);
+			} else {
+				const error = await response.json();
+				alert(error.message || "Erro ao excluir artigo");
+			}
+		} catch (error) {
+			console.error("Erro ao excluir artigo:", error);
+			alert("Erro ao excluir artigo");
+		} finally {
+			setDeletingId(null);
+		}
+	}
 
 	if (loading) {
 		return <div>Carregando...</div>;
@@ -284,6 +447,12 @@ export default function ArticlesPage() {
 												Visualizar
 											</Link>
 											<button
+												onClick={() =>
+													openDeleteModal(item)
+												}
+												disabled={
+													deletingId === item.id
+												}
 												style={{
 													padding: "0.5rem 1rem",
 													background: "transparent",
@@ -291,6 +460,10 @@ export default function ArticlesPage() {
 													borderRadius: "4px",
 													color: "#fca5a5",
 													cursor: "pointer",
+													opacity:
+														deletingId === item.id
+															? 0.5
+															: 1,
 												}}
 											>
 												Excluir
@@ -303,6 +476,17 @@ export default function ArticlesPage() {
 					</table>
 				</div>
 			)}
+
+			<ConfirmModal
+				isOpen={articleToDelete !== null}
+				title="Excluir artigo"
+				message={`Tem certeza que deseja excluir "${articleToDelete?.title}"? Esta ação não pode ser desfeita.`}
+				confirmText="Excluir"
+				cancelText="Cancelar"
+				onConfirm={handleConfirmDelete}
+				onCancel={closeDeleteModal}
+				isLoading={deletingId !== null}
+			/>
 		</div>
 	);
 }
