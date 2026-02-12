@@ -10,8 +10,13 @@ import { RequestWithUser } from "infra/types";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export const GET = controller.withAuth(FEATURES.LIST.READ_ARTICLE)(async () => {
-	const articles = await article.findAll();
+export const GET = controller.withAuth(FEATURES.LIST.READ_ARTICLE)(async (
+	request: RequestWithUser,
+) => {
+	const includeInactive = request.user?.features?.includes(
+		FEATURES.LIST.READ_INACTIVE_ARTICLE,
+	);
+	const articles = await article.findAll({ includeInactive });
 	return NextResponse.json(articles, { status: 200 });
 });
 

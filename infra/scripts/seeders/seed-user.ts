@@ -2,35 +2,30 @@ import user from "models/user";
 import FEATURES from "infra/features";
 require("dotenv").config({ path: ".env.development" });
 
-const userData = {
-	name: "User",
-	email: "user@mm.com",
-	password: "Password123@",
-};
+const usersData = [
+	{ name: "User 1", email: "user1@mm.com", password: "Password123@" },
+	{ name: "User 2", email: "user2@mm.com", password: "Password123@" },
+	{ name: "User 3", email: "user3@mm.com", password: "Password123@" },
+];
 
-async function seedUser() {
-	try {
-		// Tenta encontrar, se der erro 404 = não existe
-		await user.findOneByEmail(userData.email);
-		console.log("✅ User já existe");
-		return;
-	} catch (error) {
-		// Se não existe (erro 404), cria
-		if (error.statusCode !== 404) {
-			throw error; // Se for outro erro, relança
+async function seedUsers() {
+	for (const userData of usersData) {
+		try {
+			await user.findOneByEmail(userData.email);
+			console.log(`✅ ${userData.email} já existe`);
+			continue;
+		} catch (error) {
+			if (error.statusCode !== 404) {
+				throw error;
+			}
 		}
+
+		let newUser = await user.create(userData);
+		await user.setFeatures(newUser.id, FEATURES.DEFAULT_USER_FEATURES);
+		console.log(`✅ ${userData.email} criado com sucesso!`);
 	}
 
-	// Cria o user
-	let newUser = await user.create(userData);
-
-	newUser = await user.setFeatures(
-		newUser.id,
-		FEATURES.DEFAULT_USER_FEATURES,
-	);
-
-	console.log("✅ User criado com sucesso!");
 	process.exit(0);
 }
 
-seedUser();
+seedUsers();

@@ -6,13 +6,18 @@ import {
 	TeamMemberUpdateInput,
 } from "./types";
 
-async function findAll(): Promise<TeamMemberRecord[]> {
+async function findAll(options?: {
+	includeInactive?: boolean;
+}): Promise<TeamMemberRecord[]> {
+	const includeInactive = options?.includeInactive ?? false;
+
 	const results = await database.query({
 		text: `
 			SELECT
 				*
 			FROM
 				team_members
+			${includeInactive ? "" : "WHERE active = true"}
 			ORDER BY
 				name ASC
 			;`,
@@ -78,9 +83,10 @@ async function create(
 					image_url, 
 					role, 
 					instagram, 
-					linkedin)
+					linkedin,
+					active)
                 VALUES
-                    ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+                    ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
                 RETURNING
                     *
                 ;`,
@@ -96,6 +102,7 @@ async function create(
 				teamMemberInput.role,
 				teamMemberInput.instagram,
 				teamMemberInput.linkedin,
+				teamMemberInput.active ?? true,
 			],
 		});
 

@@ -3,15 +3,19 @@ import { NextRequest, NextResponse } from "next/server";
 import controller from "infra/controller";
 import FEATURES from "infra/features";
 import teamMember from "models/teamMember";
-import image from "models/image"; // ← Importa o model image
+import image from "models/image";
+import { RequestWithUser } from "infra/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export const GET = controller.withAuth(FEATURES.LIST.READ_TEAM_MEMBER)(async (
-	request: NextRequest,
+	request: RequestWithUser,
 ) => {
-	const teamMembers = await teamMember.findAll();
+	const includeInactive = request.user?.features?.includes(
+		FEATURES.LIST.READ_INACTIVE_TEAM_MEMBER,
+	);
+	const teamMembers = await teamMember.findAll({ includeInactive });
 	const response = NextResponse.json(teamMembers, { status: 200 });
 
 	return response;

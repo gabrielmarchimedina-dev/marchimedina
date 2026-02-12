@@ -28,6 +28,7 @@ const ALL_FEATURES = [
 	"read:team_member",
 	"create:team_member",
 	"read:activation_token",
+	"read:article",
 ];
 
 // Permissões padrão (não editáveis)
@@ -41,6 +42,7 @@ const DEFAULT_USER_FEATURES = [
 	"update:user:self",
 	"update:user:password",
 	"read:team_member",
+	"read:article",
 ];
 
 // Permissões anônimas (não editáveis)
@@ -48,6 +50,7 @@ const ANONYMOUS_FEATURES = [
 	"read:activation_token",
 	"create:session",
 	"read:team_member",
+	"read:article",
 ];
 
 // Permissões extras que podem ser adicionadas/removidas

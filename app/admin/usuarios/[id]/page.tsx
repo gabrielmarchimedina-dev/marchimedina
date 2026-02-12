@@ -62,12 +62,14 @@ export default function ViewUserPage() {
 		"update:user:self",
 		"update:user:password",
 		"read:team_member",
+		"read:article",
 	];
 
 	const anonymousFeatures = [
 		"read:activation_token",
 		"create:session",
 		"read:team_member",
+		"read:article",
 	];
 
 	const allStandardFeatures = [
