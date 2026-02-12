@@ -29,6 +29,7 @@ const LIST = {
 	READ_ARTICLE: "read:article",
 	CREATE_ARTICLE: "create:article",
 	UPDATE_ARTICLE: "update:article",
+	DELETE_ARTICLE: "delete:article",
 
 	// Activation
 	READ_ACTIVATION_TOKEN: "read:activation_token",
@@ -64,6 +65,7 @@ const MANAGER_USER_FEATURES = [
 	LIST.DELETE_TEAM_MEMBER,
 	LIST.CREATE_ARTICLE,
 	LIST.UPDATE_ARTICLE,
+	LIST.DELETE_ARTICLE,
 	LIST.UPDATE_USER_FEATURES,
 ];
 

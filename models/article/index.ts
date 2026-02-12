@@ -211,11 +211,34 @@ async function update(
 	}
 }
 
+async function softDelete(
+	articleId: string,
+	deletedBy: string | null,
+): Promise<ArticleRecord> {
+	await findOneById(articleId);
+
+	const results = await database.query({
+		text: `
+			UPDATE article
+			SET 
+				deleted_at = NOW(),
+				deleted_by = $2,
+				updated_at = NOW()
+			WHERE id = $1
+			RETURNING *
+		;`,
+		values: [articleId, deletedBy],
+	});
+
+	return results.rows[0];
+}
+
 const article = {
 	findAll,
 	findOneById,
 	create,
 	update,
+	softDelete,
 };
 
 export default article;
