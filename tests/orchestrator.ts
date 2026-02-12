@@ -14,6 +14,8 @@ import { SessionRecord } from "models/session/types";
 import activation from "models/activation";
 import FEATURES from "infra/features";
 import teamMember from "models/teamMember";
+import article from "models/article";
+import { CreateArticleInput, ArticleRecord } from "models/article/types";
 
 const emailHttpUrl = `http://${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}`;
 
@@ -188,6 +190,21 @@ async function createTeamMember(teamMemberObject?: TestTeamMemberInput) {
 	});
 }
 
+async function createArticle(
+	articleObject?: Partial<CreateArticleInput>,
+): Promise<ArticleRecord> {
+	return await article.create({
+		title: articleObject?.title || faker.lorem.sentence(),
+		subtitle: articleObject?.subtitle || faker.lorem.sentence(),
+		thumbnail:
+			articleObject?.thumbnail || "http://example.com/thumbnail.jpg",
+		text: articleObject?.text || faker.lorem.paragraphs(3),
+		active: articleObject?.active ?? true,
+		created_by: articleObject?.created_by ?? null,
+		updated_by: articleObject?.updated_by ?? null,
+	});
+}
+
 function extractUUID(text: string): string | null {
 	const match = text.match(
 		/\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\b/,
@@ -205,6 +222,7 @@ const orchestrator = {
 	createSession,
 	activateUser,
 	createTeamMember,
+	createArticle,
 	deleteAllEmails,
 	getLastEmail,
 	extractUUID,

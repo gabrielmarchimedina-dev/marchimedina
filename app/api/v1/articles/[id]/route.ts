@@ -140,5 +140,15 @@ function normalizeHistoryValue(value: any): string | null {
 	return String(value);
 }
 
-const notAllowed = () => methodNotAllowed(["GET", "PATCH"]);
-export { notAllowed as POST, notAllowed as PUT, notAllowed as DELETE };
+export const DELETE = controller.withAuth(FEATURES.LIST.DELETE_ARTICLE)(async (
+	request: RequestWithUser,
+	{ params }: { params: Promise<{ id: string }> },
+) => {
+	const { id: articleId } = await params;
+	const deletedBy = request.user?.id ?? null;
+	const deletedArticle = await article.softDelete(articleId, deletedBy);
+	return NextResponse.json(deletedArticle, { status: 200 });
+});
+
+const notAllowed = () => methodNotAllowed(["GET", "PATCH", "DELETE"]);
+export { notAllowed as POST, notAllowed as PUT };
