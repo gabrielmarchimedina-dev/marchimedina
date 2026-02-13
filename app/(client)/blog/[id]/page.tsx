@@ -6,6 +6,7 @@ import article from "models/article";
 import teamMember from "models/teamMember";
 import { getImageSrc } from "@/lib/imageUrl";
 import { FaInstagram, FaLinkedin } from "react-icons/fa";
+import { articlePageStaticData } from "./article.data";
 
 export const dynamic = "force-dynamic";
 
@@ -79,14 +80,14 @@ export default async function PostPage({ params }: PostPageProps) {
 						href="/blog"
 						className="hover:text-gold transition-colors"
 					>
-						← Voltar para o blog
+						← {articlePageStaticData.back}
 					</Link>
 				</div>
 
 				{/* TÍTULO */}
 				<header className="mb-8">
 					<p className="text-xs uppercase tracking-[0.3em] text-gold mb-3">
-						Artigo
+						{articlePageStaticData.article}
 					</p>
 
 					<h1 className="text-3xl md:text-4xl font-semibold text-textPrimary mb-3">
@@ -127,7 +128,9 @@ export default async function PostPage({ params }: PostPageProps) {
 				{authors.length > 0 && (
 					<div className="mt-12 pt-8 border-t border-white/10">
 						<h3 className="text-lg font-semibold text-gold mb-6">
-							{authors.length === 1 ? "Autor" : "Autores"}
+							{authors.length === 1
+								? articlePageStaticData.author
+								: articlePageStaticData.authors}
 						</h3>
 						<div className="grid gap-6 sm:grid-cols-2">
 							{authors.map((author) => (

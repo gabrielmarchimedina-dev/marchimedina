@@ -82,7 +82,7 @@ export default function Footer() {
 
 				{/* COPYRIGHT */}
 				<div className="text-center text-xs text-textSecondary mt-4 sm:mt-6">
-					© {new Date().getFullYear()} - {footerData.rights}
+					© {new Date().getFullYear()} {footerData.rights}
 				</div>
 			</div>
 		</footer>

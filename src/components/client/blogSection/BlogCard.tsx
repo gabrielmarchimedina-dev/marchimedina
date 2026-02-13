@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Article } from "@/types/blog/article.type";
 import { createArticleSlug } from "@/lib/client/articleSlug";
+import { blogCardStaticData } from "./blogCard.data";
 
 type BlogCardProps = {
 	post: Article;
@@ -63,7 +64,7 @@ export default function BlogCard({ post, index, isVisible }: BlogCardProps) {
 				</p>
 
 				<span className="mt-auto pt-4 inline-block text-gold text-sm font-medium">
-					Ler mais →
+					{blogCardStaticData.readMore} →
 				</span>
 			</div>
 		</Link>
