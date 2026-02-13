@@ -6,6 +6,8 @@ export type ArticleRecord = {
 	text: string;
 	view_count: number;
 	active: boolean;
+	authors: string[] | null;
+	language: "portugues" | "ingles" | "frances";
 	created_by: string | null;
 	updated_by: string | null;
 	deleted_by: string | null;
@@ -23,6 +25,8 @@ export type CreateArticleInput = {
 	updated_by?: string | null;
 	active?: boolean;
 	view_count?: number;
+	authors?: string[] | null;
+	language?: "portugues" | "ingles" | "frances";
 };
 
 export type UpdateArticleInput = {
@@ -32,4 +36,6 @@ export type UpdateArticleInput = {
 	text?: string;
 	active?: boolean;
 	updated_by?: string | null;
+	authors?: string[] | null;
+	language?: "portugues" | "ingles" | "frances";
 };

@@ -1,4 +1,5 @@
 import orchestrator from "tests/orchestrator";
+import teamMember from "models/teamMember";
 import fs from "fs";
 import path from "path";
 
@@ -145,12 +146,53 @@ describe("POST /api/v1/articles", () => {
 			);
 			expect(responseBody.view_count).toBe(0);
 			expect(responseBody.active).toBe(true);
+			expect(responseBody.authors).toBeNull();
+			expect(responseBody.language).toBe("portugues");
 			expect(responseBody.created_by).toBe(adminUser.id);
 			expect(responseBody.updated_by).toBe(adminUser.id);
 			expect(responseBody.deleted_by).toBeNull();
 			expect(responseBody.deleted_at).toBeNull();
 			expect(responseBody.created_at).toBeDefined();
 			expect(responseBody.updated_at).toBeDefined();
+		});
+
+		test("With authors and language", async () => {
+			const adminUser = await orchestrator.createAdminUser();
+			const adminSession = await orchestrator.createSession(adminUser.id);
+
+			const author = await orchestrator.createTeamMember();
+
+			const testFile = await createTestImageFile(
+				"article-with-authors.png",
+			);
+
+			const formData = new FormData();
+			formData.append("title", "Article With Authors");
+			formData.append("subtitle", "Article Subtitle");
+			formData.append("text", "Article content");
+			formData.append("file", testFile);
+			formData.append("language", "ingles");
+			formData.append("authors", JSON.stringify([author.id]));
+
+			const response = await fetch(
+				"http://localhost:3000/api/v1/articles",
+				{
+					method: "POST",
+					headers: {
+						Cookie: `session_id=${adminSession.token}`,
+					},
+					body: formData,
+				},
+			);
+
+			expect(response.status).toBe(201);
+
+			const responseBody = await response.json();
+
+			expect(responseBody.id).toBeDefined();
+			expect(responseBody.title).toBe("Article With Authors");
+			expect(responseBody.language).toBe("ingles");
+			expect(responseBody.authors).toEqual([author.id]);
 		});
 	});
 });

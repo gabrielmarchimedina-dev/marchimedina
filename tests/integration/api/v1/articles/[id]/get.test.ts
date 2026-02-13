@@ -1,5 +1,6 @@
 import orchestrator from "tests/orchestrator";
 import article from "models/article";
+import teamMember from "models/teamMember";
 
 beforeAll(async () => {
 	await orchestrator.waitForAllServices();
@@ -32,6 +33,8 @@ describe("GET /api/v1/articles/[id]", () => {
 				text: createdArticle.text,
 				view_count: createdArticle.view_count,
 				active: createdArticle.active,
+				authors: [],
+				language: createdArticle.language,
 				created_by: createdArticle.created_by,
 				updated_by: createdArticle.updated_by,
 				deleted_by: createdArticle.deleted_by,
@@ -59,6 +62,39 @@ describe("GET /api/v1/articles/[id]", () => {
 			const responseBody = await response.json();
 
 			expect(responseBody).toEqual(errorResponse);
+		});
+
+		test("Should see article with authors populated", async () => {
+			const author1 = await orchestrator.createTeamMember({
+				name: "Author One",
+			});
+			const author2 = await orchestrator.createTeamMember({
+				name: "Author Two",
+			});
+
+			const createdArticle = await article.create({
+				title: "Article With Authors",
+				subtitle: "Article Subtitle",
+				thumbnail: "assets/images/blog/1.png",
+				text: "Article content",
+				authors: [author1.id, author2.id],
+			});
+
+			const response = await fetch(
+				`http://localhost:3000/api/v1/articles/${createdArticle.id}`,
+			);
+			expect(response.status).toBe(200);
+
+			const responseBody = await response.json();
+
+			expect(responseBody.id).toBe(createdArticle.id);
+			expect(responseBody.authors).toHaveLength(2);
+			expect(responseBody.authors[0].id).toBeDefined();
+			expect(responseBody.authors[0].name).toBeDefined();
+			expect(responseBody.authors[0].image_url).toBeDefined();
+			expect(responseBody.authors.map((a: any) => a.id).sort()).toEqual(
+				[author1.id, author2.id].sort(),
+			);
 		});
 	});
 
@@ -95,6 +131,8 @@ describe("GET /api/v1/articles/[id]", () => {
 				text: createdArticle.text,
 				view_count: createdArticle.view_count,
 				active: createdArticle.active,
+				authors: [],
+				language: createdArticle.language,
 				created_by: createdArticle.created_by,
 				updated_by: createdArticle.updated_by,
 				deleted_by: createdArticle.deleted_by,
@@ -166,6 +204,8 @@ describe("GET /api/v1/articles/[id]", () => {
 				text: createdArticle.text,
 				view_count: createdArticle.view_count,
 				active: createdArticle.active,
+				authors: [],
+				language: createdArticle.language,
 				created_by: createdArticle.created_by,
 				updated_by: createdArticle.updated_by,
 				deleted_by: createdArticle.deleted_by,

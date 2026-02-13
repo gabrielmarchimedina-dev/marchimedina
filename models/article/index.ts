@@ -69,9 +69,9 @@ async function create(
 		const results = await database.query({
 			text: `
 				INSERT INTO article
-					(title, subtitle, thumbnail, text, view_count, active, created_by, updated_by)
+					(title, subtitle, thumbnail, text, view_count, active, created_by, updated_by, authors, language)
 				VALUES
-					($1, $2, $3, $4, $5, $6, $7, $8)
+					($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 				RETURNING
 					*
 			;`,
@@ -84,6 +84,8 @@ async function create(
 				input.active,
 				input.created_by,
 				input.updated_by,
+				input.authors,
+				input.language,
 			],
 		});
 
@@ -96,6 +98,8 @@ function normalizeInput(input: CreateArticleInput): CreateArticleInput {
 	const active = input.active ?? true;
 	const createdBy = input.created_by ?? null;
 	const updatedBy = input.updated_by ?? createdBy;
+	const authors = input.authors ?? null;
+	const language = input.language ?? "portugues";
 
 	return {
 		...input,
@@ -107,6 +111,8 @@ function normalizeInput(input: CreateArticleInput): CreateArticleInput {
 		active,
 		created_by: createdBy,
 		updated_by: updatedBy,
+		authors,
+		language,
 	};
 }
 
@@ -194,6 +200,18 @@ async function update(
 		if (updateInput.updated_by !== undefined) {
 			updateFields.push(`updated_by = $${paramCount}`);
 			updateValues.push(updateInput.updated_by);
+			paramCount++;
+		}
+
+		if (updateInput.authors !== undefined) {
+			updateFields.push(`authors = $${paramCount}`);
+			updateValues.push(updateInput.authors);
+			paramCount++;
+		}
+
+		if (updateInput.language !== undefined) {
+			updateFields.push(`language = $${paramCount}`);
+			updateValues.push(updateInput.language);
 			paramCount++;
 		}
 

@@ -29,6 +29,8 @@ export const POST = controller.withAuth(FEATURES.LIST.CREATE_ARTICLE)(async (
 	const subtitle = formData.get("subtitle") as string | null;
 	const text = formData.get("text") as string | null;
 	const activeRaw = formData.get("active") as string | null;
+	const languageRaw = formData.get("language") as string | null;
+	const authorsRaw = formData.get("authors") as string | null;
 
 	const thumbnailField = formData.get("thumbnail");
 	const fileField = formData.get("file");
@@ -61,6 +63,8 @@ export const POST = controller.withAuth(FEATURES.LIST.CREATE_ARTICLE)(async (
 	}
 
 	const active = parseOptionalBoolean(activeRaw);
+	const language = parseLanguage(languageRaw);
+	const authors = parseAuthors(authorsRaw);
 
 	const createdArticle = await article.create({
 		title: title ?? "",
@@ -68,6 +72,8 @@ export const POST = controller.withAuth(FEATURES.LIST.CREATE_ARTICLE)(async (
 		text: text ?? "",
 		thumbnail,
 		active,
+		language,
+		authors,
 		created_by: request.user?.id ?? null,
 		updated_by: request.user?.id ?? null,
 	});
@@ -82,6 +88,43 @@ function parseOptionalBoolean(value: string | null) {
 
 	const normalized = value.trim().toLowerCase();
 	return normalized === "true" || normalized === "1";
+}
+
+function parseLanguage(
+	value: string | null,
+): "portugues" | "ingles" | "frances" | undefined {
+	if (value === null || value.trim() === "") {
+		return undefined;
+	}
+	const normalized = value.trim().toLowerCase();
+	if (
+		normalized === "portugues" ||
+		normalized === "ingles" ||
+		normalized === "frances"
+	) {
+		return normalized;
+	}
+	return undefined;
+}
+
+function parseAuthors(value: string | null): string[] | null {
+	if (value === null || value.trim() === "") {
+		return null;
+	}
+	try {
+		const parsed = JSON.parse(value);
+		if (Array.isArray(parsed)) {
+			return parsed.filter(
+				(id) => typeof id === "string" && id.trim() !== "",
+			);
+		}
+		return null;
+	} catch {
+		return value
+			.split(",")
+			.map((id) => id.trim())
+			.filter((id) => id !== "");
+	}
 }
 
 const notAllowed = () => methodNotAllowed(["GET", "POST"]);

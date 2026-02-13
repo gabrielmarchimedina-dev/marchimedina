@@ -275,5 +275,60 @@ describe("PATCH /api/v1/articles/[id]", () => {
 
 			expect(responseBody).toEqual(errorResponse);
 		});
+
+		test("Updating article with authors and language", async () => {
+			const admin = await orchestrator.createAdminUser();
+			const adminSession = await orchestrator.createSession(admin.id);
+
+			const author = await orchestrator.createTeamMember();
+
+			const articleRecord = await article.create({
+				title: "Article Title",
+				subtitle: "Article Subtitle",
+				thumbnail: "assets/images/blog/old.png",
+				text: "Article content",
+			});
+
+			const formData = new FormData();
+			formData.append("language", "frances");
+			formData.append("authors", JSON.stringify([author.id]));
+
+			const response = await fetch(
+				`http://localhost:3000/api/v1/articles/${articleRecord.id}`,
+				{
+					method: "PATCH",
+					headers: {
+						Cookie: `session_id=${adminSession.token}`,
+					},
+					body: formData,
+				},
+			);
+
+			expect(response.status).toBe(200);
+
+			const responseBody = await response.json();
+
+			expect(responseBody.id).toBe(articleRecord.id);
+			expect(responseBody.language).toBe("frances");
+			expect(responseBody.authors).toEqual([author.id]);
+
+			const historyEntries = await articleHistory.findAllByArticleId(
+				articleRecord.id,
+			);
+			const languageHistory = historyEntries.find(
+				(e) => e.field === "language",
+			);
+			const authorsHistory = historyEntries.find(
+				(e) => e.field === "authors",
+			);
+
+			expect(languageHistory).toBeDefined();
+			expect(languageHistory?.old_value).toBe("portugues");
+			expect(languageHistory?.new_value).toBe("frances");
+
+			expect(authorsHistory).toBeDefined();
+			expect(authorsHistory?.old_value).toBeNull();
+			expect(authorsHistory?.new_value).toBe(JSON.stringify([author.id]));
+		});
 	});
 });

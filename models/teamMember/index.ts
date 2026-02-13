@@ -365,9 +365,32 @@ async function findImageUsageCount(imageUrl: string): Promise<number> {
 	return parseInt(results.rows[0].count);
 }
 
+async function findManyByIds(memberIds: string[]): Promise<TeamMemberRecord[]> {
+	if (!memberIds || memberIds.length === 0) {
+		return [];
+	}
+
+	const results = await database.query({
+		text: `
+			SELECT
+				*
+			FROM
+				team_members
+			WHERE
+				id = ANY($1)
+			ORDER BY
+				name ASC
+			;`,
+		values: [memberIds],
+	});
+
+	return results.rows;
+}
+
 const teamMember = {
 	findAll,
 	findOneById,
+	findManyByIds,
 	create,
 	update,
 	deactivate,
