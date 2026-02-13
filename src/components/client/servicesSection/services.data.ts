@@ -9,7 +9,7 @@ export const serviceSectionHeader = {
 
 export const serviceSectionEnglishHeader = {
 	label: "Practice Areas",
-	title: "Areas of Expertise",
+	title: "Core Impact Areas",
 	subtitle:
 		"Discover our specializations and count on strategic and personalized legal support.",
 };
@@ -17,77 +17,77 @@ export const serviceSectionEnglishHeader = {
 export const services: Service[] = [
 	{
 		id: 1,
-		title: "Direito Empresarial e Societário",
+		title: "Direito de Imigração e Família",
 		description:
-			"Assessoria jurídica contínua para empresas, estruturação societária e suporte em decisões estratégicas.",
+			"Assessoria em processos migratórios, vistos, cidadania e questões familiares transnacionais com acolhimento e segurança jurídica.",
 	},
 	{
 		id: 2,
-		title: "Contratos e Negociações",
-		description:
-			"Elaboração, revisão e negociação de contratos civis e empresariais, com foco em segurança jurídica.",
-	},
-	{
-		id: 3,
 		title: "Direito Civil e Responsabilidade",
 		description:
 			"Atuação em conflitos envolvendo obrigações, responsabilidade civil, indenizações e disputas contratuais.",
 	},
 	{
+		id: 3,
+		title: "Propriedade Intelectual e Direito Digital",
+		description:
+			"Proteção de marcas, patentes, direitos autorais e assessoria em contratos de tecnologia e privacidade de dados.",
+	},
+	{
 		id: 4,
-		title: "Direito do Consumidor",
-		description:
-			"Defesa de empresas em demandas individuais e coletivas e orientação em práticas de consumo.",
-	},
-	{
-		id: 5,
-		title: "Direito do Trabalho Empresarial",
-		description:
-			"Orientação preventiva e contenciosa em relações de trabalho, políticas internas e litígios trabalhistas.",
-	},
-	{
-		id: 6,
 		title: "Consultoria Preventiva e Compliance",
 		description:
 			"Implementação de políticas de governança, compliance e gestão de riscos, evitando litígios futuros.",
+	},
+	{
+		id: 5,
+		title: "Direito Empresarial e Societário",
+		description:
+			"Assessoria jurídica contínua para empresas, estruturação societária e suporte em decisões estratégicas.",
+	},
+	{
+		id: 6,
+		title: "Contratos e Negociações",
+		description:
+			"Elaboração, revisão e negociação de contratos civis e empresariais, com foco em segurança jurídica.",
 	},
 ];
 
 export const englishServices: Service[] = [
 	{
 		id: 1,
-		title: "Corporate and Business Law",
+		title: "Immigration and Family Law",
 		description:
-			"Continuous legal advisory for companies, corporate structuring, and support in strategic decisions.",
+			"Advisory on immigration processes, visas, citizenship, and transnational family matters with care and legal security.",
 	},
 	{
 		id: 2,
-		title: "Contracts and Negotiations",
-		description:
-			"Drafting, reviewing, and negotiating civil and business contracts, with a focus on legal security.",
-	},
-	{
-		id: 3,
 		title: "Civil Law and Liability",
 		description:
 			"Handling conflicts involving obligations, civil liability, indemnities, and contractual disputes.",
 	},
 	{
+		id: 3,
+		title: "Intellectual Property and Technology Law",
+		description:
+			"Protection of trademarks, patents, copyrights, and advisory on technology contracts and data privacy.",
+	},
+	{
 		id: 4,
-		title: "Consumer Law",
-		description:
-			"Defense of companies in individual and collective claims and guidance on consumer practices.",
-	},
-	{
-		id: 5,
-		title: "Labor Law for Businesses",
-		description:
-			"Preventive and contentious guidance in labor relations, internal policies, and labor litigation.",
-	},
-	{
-		id: 6,
 		title: "Preventive Consulting and Compliance",
 		description:
 			"Implementation of governance, compliance, and risk management policies to avoid future litigation.",
+	},
+	{
+		id: 5,
+		title: "Corporate and Business Law",
+		description:
+			"Continuous legal advisory for companies, corporate structuring, and support in strategic decisions.",
+	},
+	{
+		id: 6,
+		title: "Contracts and Negotiations",
+		description:
+			"Drafting, reviewing, and negotiating civil and business contracts, with a focus on legal security.",
 	},
 ];

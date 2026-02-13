@@ -70,14 +70,6 @@ export default function Footer() {
 						>
 							<FaLinkedin />
 						</a>
-						<a
-							href="https://facebook.com"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="hover:text-gold transition-colors"
-						>
-							<FaFacebook />
-						</a>
 					</div>
 				</div>
 

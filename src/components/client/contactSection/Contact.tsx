@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useScrollAnimation } from "@/hooks/client/useScrollAnimation";
 import { useLanguage } from "@/hooks/client/useLanguage";
 import { contactSectionData, contactSectionEnglishData } from "./contact.data";
@@ -53,8 +52,8 @@ export default function ContactSection() {
 							{data.whatsAppButtonText}
 						</a>
 
-						{/* Ir para página de contato */}
-						<Link
+						{/* TODO: Descomentar quando o serviço de e-mail estiver pronto */}
+						{/* <Link
 							href="/contato"
 							className="
                 w-full sm:w-auto inline-flex items-center justify-center
@@ -63,7 +62,7 @@ export default function ContactSection() {
               "
 						>
 							{data.emailButtonText}
-						</Link>
+						</Link> */}
 					</div>
 
 					{/* Info rápida de contato */}

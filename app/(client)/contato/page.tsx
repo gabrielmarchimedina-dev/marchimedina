@@ -1,9 +1,14 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { useLanguage } from "@/hooks/client/useLanguage";
-import { contactStaticData, contactStaticEnglishData } from "./contact.data";
+// TODO: Descomentar quando o serviço de e-mail estiver pronto
+// import { useLanguage } from "@/hooks/client/useLanguage";
+// import { contactStaticData, contactStaticEnglishData } from "./contact.data";
 
 export default function ContactPage() {
+	// Página desabilitada temporariamente - redireciona para home
+	redirect("/");
+
+	/* TODO: Descomentar quando o serviço de e-mail estiver pronto
 	const { language } = useLanguage();
 	const data =
 		language === "en" ? contactStaticEnglishData : contactStaticData;
@@ -25,7 +30,6 @@ export default function ContactPage() {
 					</p>
 				</header>
 
-				{/* Formulário simples demonstrativo */}
 				<form className="space-y-6">
 					<div className="flex flex-col gap-2">
 						<label htmlFor="name" className="text-sm font-medium">
@@ -76,11 +80,11 @@ export default function ContactPage() {
 					</button>
 				</form>
 
-				{/* Texto de rodapé opcional */}
 				<p className="mt-8 text-center text-xs text-textSecondary">
 					{data.messageReason}
 				</p>
 			</div>
 		</main>
 	);
+	*/
 }

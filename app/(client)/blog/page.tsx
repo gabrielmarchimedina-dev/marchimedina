@@ -1,7 +1,5 @@
-import BlogCard from "@/components/client/blogSection/BlogCard";
-import BlogPageHeader, {
-	BlogPageEmpty,
-} from "@/components/client/blogSection/BlogPageHeader";
+import BlogPageHeader from "@/components/client/blogSection/BlogPageHeader";
+import BlogListWithFilter from "@/components/client/blogSection/BlogListWithFilter";
 import article from "models/article";
 import { Article as ClientArticle } from "@/types/blog/article.type";
 
@@ -25,6 +23,7 @@ export default async function BlogPage() {
 		text: item.text,
 		thumbnail: item.thumbnail,
 		active: item.active,
+		language: item.language,
 		created_at:
 			item.created_at instanceof Date
 				? item.created_at.toISOString()
@@ -39,21 +38,7 @@ export default async function BlogPage() {
 		<main className="min-h-screen bg-background text-textPrimary pt-28 pb-16">
 			<div className="mx-auto max-w-5xl px-4">
 				<BlogPageHeader />
-
-				{serializedPosts.length === 0 ? (
-					<BlogPageEmpty />
-				) : (
-					<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-						{serializedPosts.map((post, index) => (
-							<BlogCard
-								key={post.id}
-								post={post}
-								index={index}
-								isVisible={true}
-							/>
-						))}
-					</div>
-				)}
+				<BlogListWithFilter posts={serializedPosts} />
 			</div>
 		</main>
 	);

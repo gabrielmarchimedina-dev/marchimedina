@@ -1,3 +1,5 @@
+export type ArticleLanguage = "portugues" | "ingles" | "frances";
+
 export type Article = {
 	id: string;
 	title: string;
@@ -5,6 +7,7 @@ export type Article = {
 	text: string;
 	thumbnail: string | null;
 	active: boolean;
+	language: ArticleLanguage;
 	created_at: string;
 	updated_at: string;
 };

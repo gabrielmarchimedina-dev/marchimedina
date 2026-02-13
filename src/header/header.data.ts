@@ -9,7 +9,7 @@ export const headerData = {
 
 export const headerEnglishData = {
 	agencyName: "Marchi Medina",
-	agencyTagline: "Advocacy",
+	agencyTagline: "Law Firm",
 	services: "Services",
 	blog: "Blog",
 	contact: "Contact",
