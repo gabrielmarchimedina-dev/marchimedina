@@ -4,6 +4,7 @@ import controller from "infra/controller";
 import FEATURES from "infra/features";
 import article from "models/article";
 import image from "models/image";
+import teamMember from "models/teamMember";
 import { ValidationError } from "infra/errors";
 import articleHistory from "models/aticleHistory";
 import { RequestWithUser } from "infra/types";
@@ -17,7 +18,12 @@ export const GET = controller.withAuth(FEATURES.LIST.READ_ARTICLE)(async (
 ) => {
 	const { id: articleId } = await params;
 	const articleRecord = await article.findOneById(articleId);
-	return NextResponse.json(articleRecord, { status: 200 });
+
+	const authors = articleRecord.authors
+		? await teamMember.findManyByIds(articleRecord.authors)
+		: [];
+
+	return NextResponse.json({ ...articleRecord, authors }, { status: 200 });
 });
 
 export const PATCH = controller.withAuth(FEATURES.LIST.UPDATE_ARTICLE)(async (
@@ -32,6 +38,8 @@ export const PATCH = controller.withAuth(FEATURES.LIST.UPDATE_ARTICLE)(async (
 	const subtitle = formData.get("subtitle") as string | null;
 	const text = formData.get("text") as string | null;
 	const activeRaw = formData.get("active") as string | null;
+	const languageRaw = formData.get("language") as string | null;
+	const authorsRaw = formData.get("authors") as string | null;
 
 	const thumbnailField = formData.get("thumbnail");
 	const fileField = formData.get("file");
@@ -64,6 +72,8 @@ export const PATCH = controller.withAuth(FEATURES.LIST.UPDATE_ARTICLE)(async (
 	}
 
 	const active = parseOptionalBoolean(activeRaw);
+	const language = parseLanguage(languageRaw);
+	const authors = parseAuthors(authorsRaw);
 
 	const updateData: any = {};
 	if (title !== null) updateData.title = title;
@@ -71,6 +81,8 @@ export const PATCH = controller.withAuth(FEATURES.LIST.UPDATE_ARTICLE)(async (
 	if (text !== null) updateData.text = text;
 	if (thumbnail !== null) updateData.thumbnail = thumbnail;
 	if (active !== undefined) updateData.active = active;
+	if (language !== undefined) updateData.language = language;
+	if (authors !== null) updateData.authors = authors;
 	updateData.updated_by = request.user?.id ?? null;
 
 	const updatedArticle = await article.update(articleId, updateData);
@@ -97,6 +109,43 @@ function parseOptionalBoolean(value: string | null) {
 	return normalized === "true" || normalized === "1";
 }
 
+function parseLanguage(
+	value: string | null,
+): "portugues" | "ingles" | "frances" | undefined {
+	if (value === null || value.trim() === "") {
+		return undefined;
+	}
+	const normalized = value.trim().toLowerCase();
+	if (
+		normalized === "portugues" ||
+		normalized === "ingles" ||
+		normalized === "frances"
+	) {
+		return normalized;
+	}
+	return undefined;
+}
+
+function parseAuthors(value: string | null): string[] | null {
+	if (value === null || value.trim() === "") {
+		return null;
+	}
+	try {
+		const parsed = JSON.parse(value);
+		if (Array.isArray(parsed)) {
+			return parsed.filter(
+				(id) => typeof id === "string" && id.trim() !== "",
+			);
+		}
+		return null;
+	} catch {
+		return value
+			.split(",")
+			.map((id) => id.trim())
+			.filter((id) => id !== "");
+	}
+}
+
 function buildHistoryEntries(before: any, after: any, editedBy: string | null) {
 	const fields = [
 		"title",
@@ -104,6 +153,8 @@ function buildHistoryEntries(before: any, after: any, editedBy: string | null) {
 		"text",
 		"thumbnail",
 		"active",
+		"language",
+		"authors",
 	] as const;
 	const entries = [] as {
 		article_id: string;
@@ -136,6 +187,9 @@ function normalizeHistoryValue(value: any): string | null {
 	}
 	if (typeof value === "boolean") {
 		return value ? "true" : "false";
+	}
+	if (Array.isArray(value)) {
+		return JSON.stringify(value);
 	}
 	return String(value);
 }
