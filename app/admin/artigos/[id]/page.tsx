@@ -1,9 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+
+type TeamMember = {
+	id: string;
+	name: string;
+	image_url: string;
+};
 
 type Article = {
 	id: string;
@@ -13,6 +19,8 @@ type Article = {
 	text: string;
 	view_count: number;
 	active: boolean;
+	language: "portugues" | "ingles" | "frances";
+	authors: TeamMember[];
 	created_by: string | null;
 	updated_by: string | null;
 	deleted_by: string | null;
@@ -43,7 +51,13 @@ export default function ViewArticlePage() {
 		subtitle: "",
 		text: "",
 		active: true,
+		language: "portugues" as "portugues" | "ingles" | "frances",
 	});
+	const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
+	const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+	const [authorSearch, setAuthorSearch] = useState("");
+	const [authorDropdownOpen, setAuthorDropdownOpen] = useState(false);
+	const authorDropdownRef = useRef<HTMLDivElement>(null);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string>("");
 	const [error, setError] = useState("");
@@ -64,7 +78,11 @@ export default function ViewArticlePage() {
 						subtitle: data.subtitle ?? "",
 						text: data.text ?? "",
 						active: Boolean(data.active),
+						language: data.language ?? "portugues",
 					});
+					setSelectedAuthors(
+						data.authors?.map((a: TeamMember) => a.id) ?? [],
+					);
 					setPreviewUrl(data.thumbnail ? `/${data.thumbnail}` : "");
 				} else {
 					router.push("/admin/artigos");
@@ -79,6 +97,37 @@ export default function ViewArticlePage() {
 
 		fetchArticle();
 	}, [articleId, router]);
+
+	useEffect(() => {
+		async function fetchTeamMembers() {
+			try {
+				const response = await fetch("/api/v1/team-members", {
+					credentials: "include",
+				});
+				if (response.ok) {
+					const data = await response.json();
+					setTeamMembers(data);
+				}
+			} catch (error) {
+				console.error("Erro ao buscar membros da equipe:", error);
+			}
+		}
+		fetchTeamMembers();
+	}, []);
+
+	useEffect(() => {
+		function handleClickOutside(event: MouseEvent) {
+			if (
+				authorDropdownRef.current &&
+				!authorDropdownRef.current.contains(event.target as Node)
+			) {
+				setAuthorDropdownOpen(false);
+			}
+		}
+		document.addEventListener("mousedown", handleClickOutside);
+		return () =>
+			document.removeEventListener("mousedown", handleClickOutside);
+	}, []);
 
 	const fetchHistory = useCallback(async () => {
 		try {
@@ -118,6 +167,8 @@ export default function ViewArticlePage() {
 			submitFormData.append("subtitle", formData.subtitle);
 			submitFormData.append("text", formData.text);
 			submitFormData.append("active", formData.active ? "true" : "false");
+			submitFormData.append("language", formData.language);
+			submitFormData.append("authors", JSON.stringify(selectedAuthors));
 
 			if (selectedFile) {
 				submitFormData.append("file", selectedFile);
@@ -176,6 +227,35 @@ export default function ViewArticlePage() {
 			reader.readAsDataURL(file);
 		}
 	}
+
+	function handleLanguageChange(e: React.ChangeEvent<HTMLSelectElement>) {
+		setFormData((prev) => ({
+			...prev,
+			language: e.target.value as "portugues" | "ingles" | "frances",
+		}));
+	}
+
+	function toggleAuthor(authorId: string) {
+		setSelectedAuthors((prev) =>
+			prev.includes(authorId)
+				? prev.filter((id) => id !== authorId)
+				: [...prev, authorId],
+		);
+	}
+
+	const filteredTeamMembers = teamMembers.filter((member) =>
+		member.name.toLowerCase().includes(authorSearch.toLowerCase()),
+	);
+
+	const selectedAuthorNames = teamMembers
+		.filter((m) => selectedAuthors.includes(m.id))
+		.map((m) => m.name);
+
+	const languageLabels: Record<string, string> = {
+		portugues: "Português",
+		ingles: "Inglês",
+		frances: "Francês",
+	};
 
 	return (
 		<div>
@@ -428,6 +508,189 @@ export default function ViewArticlePage() {
 							)}
 						</div>
 
+						<div
+							style={{
+								display: "grid",
+								gridTemplateColumns: "1fr 1fr",
+								gap: "2rem",
+								marginBottom: "2rem",
+							}}
+						>
+							<div>
+								<label
+									htmlFor="language"
+									style={{
+										display: "block",
+										marginBottom: "0.5rem",
+										fontSize: "0.875rem",
+										color: "#d1d5db",
+										fontWeight: "500",
+									}}
+								>
+									Idioma
+								</label>
+								<select
+									id="language"
+									name="language"
+									value={formData.language}
+									onChange={handleLanguageChange}
+									style={{
+										width: "100%",
+										padding: "0.75rem",
+										background: "#0a0a0a",
+										border: "1px solid #333",
+										borderRadius: "6px",
+										color: "#ededed",
+										fontSize: "1rem",
+										outline: "none",
+										cursor: "pointer",
+									}}
+								>
+									<option value="portugues">Português</option>
+									<option value="ingles">Inglês</option>
+									<option value="frances">Francês</option>
+								</select>
+							</div>
+
+							<div
+								ref={authorDropdownRef}
+								style={{ position: "relative" }}
+							>
+								<label
+									style={{
+										display: "block",
+										marginBottom: "0.5rem",
+										fontSize: "0.875rem",
+										color: "#d1d5db",
+										fontWeight: "500",
+									}}
+								>
+									Autores
+								</label>
+								<div
+									onClick={() =>
+										setAuthorDropdownOpen(
+											!authorDropdownOpen,
+										)
+									}
+									style={{
+										width: "100%",
+										padding: "0.75rem",
+										background: "#0a0a0a",
+										border: "1px solid #333",
+										borderRadius: "6px",
+										color:
+											selectedAuthors.length > 0
+												? "#ededed"
+												: "#666",
+										fontSize: "1rem",
+										cursor: "pointer",
+										minHeight: "46px",
+									}}
+								>
+									{selectedAuthors.length > 0
+										? selectedAuthorNames.join(", ")
+										: "Selecione os autores..."}
+								</div>
+								{authorDropdownOpen && (
+									<div
+										style={{
+											position: "absolute",
+											top: "100%",
+											left: 0,
+											right: 0,
+											background: "#1a1a1a",
+											border: "1px solid #333",
+											borderRadius: "6px",
+											marginTop: "4px",
+											zIndex: 100,
+											maxHeight: "250px",
+											overflowY: "auto",
+										}}
+									>
+										<div style={{ padding: "0.5rem" }}>
+											<input
+												type="text"
+												placeholder="Buscar por nome..."
+												value={authorSearch}
+												onChange={(e) =>
+													setAuthorSearch(
+														e.target.value,
+													)
+												}
+												onClick={(e) =>
+													e.stopPropagation()
+												}
+												style={{
+													width: "100%",
+													padding: "0.5rem",
+													background: "#0a0a0a",
+													border: "1px solid #333",
+													borderRadius: "4px",
+													color: "#ededed",
+													fontSize: "0.875rem",
+													outline: "none",
+												}}
+											/>
+										</div>
+										{filteredTeamMembers.map((member) => (
+											<div
+												key={member.id}
+												onClick={() =>
+													toggleAuthor(member.id)
+												}
+												style={{
+													padding: "0.75rem 1rem",
+													display: "flex",
+													alignItems: "center",
+													gap: "0.75rem",
+													cursor: "pointer",
+													background:
+														selectedAuthors.includes(
+															member.id,
+														)
+															? "#2a2a2a"
+															: "transparent",
+													borderBottom:
+														"1px solid #222",
+												}}
+											>
+												<input
+													type="checkbox"
+													checked={selectedAuthors.includes(
+														member.id,
+													)}
+													onChange={() => {}}
+													style={{
+														width: "16px",
+														height: "16px",
+														accentColor: "#d4af37",
+														cursor: "pointer",
+													}}
+												/>
+												<span
+													style={{ color: "#ededed" }}
+												>
+													{member.name}
+												</span>
+											</div>
+										))}
+										{filteredTeamMembers.length === 0 && (
+											<div
+												style={{
+													padding: "1rem",
+													color: "#666",
+													textAlign: "center",
+												}}
+											>
+												Nenhum membro encontrado
+											</div>
+										)}
+									</div>
+								)}
+							</div>
+						</div>
+
 						<div style={{ marginBottom: "2rem" }}>
 							<label
 								htmlFor="active"
@@ -601,6 +864,54 @@ export default function ViewArticlePage() {
 									{article.active ? "✓" : "○"}
 									{article.active ? " Ativo" : " Inativo"}
 								</span>
+							</div>
+
+							<div>
+								<label
+									style={{
+										display: "block",
+										marginBottom: "0.25rem",
+										color: "#999",
+										fontSize: "0.875rem",
+									}}
+								>
+									Idioma
+								</label>
+								<p
+									style={{
+										fontSize: "1rem",
+										color: "#ededed",
+									}}
+								>
+									{languageLabels[article.language] ||
+										article.language}
+								</p>
+							</div>
+
+							<div>
+								<label
+									style={{
+										display: "block",
+										marginBottom: "0.25rem",
+										color: "#999",
+										fontSize: "0.875rem",
+									}}
+								>
+									Autores
+								</label>
+								<p
+									style={{
+										fontSize: "1rem",
+										color: "#ededed",
+									}}
+								>
+									{article.authors &&
+									article.authors.length > 0
+										? article.authors
+												.map((a: TeamMember) => a.name)
+												.join(", ")
+										: "Nenhum autor selecionado"}
+								</p>
 							</div>
 
 							<div>
