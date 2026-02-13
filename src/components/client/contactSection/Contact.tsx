@@ -2,9 +2,13 @@
 
 import Link from "next/link";
 import { useScrollAnimation } from "@/hooks/client/useScrollAnimation";
-import { contactSectionData } from "./contact.data";
+import { useLanguage } from "@/hooks/client/useLanguage";
+import { contactSectionData, contactSectionEnglishData } from "./contact.data";
 
 export default function ContactSection() {
+	const { language } = useLanguage();
+	const data =
+		language === "en" ? contactSectionEnglishData : contactSectionData;
 	const { ref, isVisible } = useScrollAnimation(0.2);
 
 	return (
@@ -21,15 +25,15 @@ export default function ContactSection() {
           `}
 				>
 					<p className="text-xs tracking-[0.2em] sm:tracking-[0.3em] uppercase text-gold mb-3">
-						{contactSectionData.label}
+						{data.label}
 					</p>
 
 					<h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gold mb-4 px-2">
-						{contactSectionData.title}
+						{data.title}
 					</h2>
 
 					<p className="text-textSecondary mb-8 sm:mb-10 max-w-2xl mx-auto text-sm md:text-base px-4">
-						{contactSectionData.subtitle}
+						{data.subtitle}
 					</p>
 
 					{/* Botões */}
@@ -46,7 +50,7 @@ export default function ContactSection() {
                 transition hover:bg-gold-light hover:shadow-gold/50
               "
 						>
-							{contactSectionData.whatsAppButtonText}
+							{data.whatsAppButtonText}
 						</a>
 
 						{/* Ir para página de contato */}
@@ -58,7 +62,7 @@ export default function ContactSection() {
                 text-gold hover:bg-gold/10 transition
               "
 						>
-							{contactSectionData.emailButtonText}
+							{data.emailButtonText}
 						</Link>
 					</div>
 
@@ -66,17 +70,15 @@ export default function ContactSection() {
 					<div className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm text-textSecondary px-4">
 						<div>
 							<p className="font-semibold text-textPrimary mb-1">
-								{contactSectionData.phoneLabel}
+								{data.phoneLabel}
 							</p>
-							<p>{contactSectionData.phoneNumber}</p>
+							<p>{data.phoneNumber}</p>
 						</div>
 						<div>
 							<p className="font-semibold text-textPrimary mb-1">
-								{contactSectionData.emailLabel}
+								{data.emailLabel}
 							</p>
-							<p className="break-all">
-								{contactSectionData.emailAddress}
-							</p>
+							<p className="break-all">{data.emailAddress}</p>
 						</div>
 					</div>
 				</div>

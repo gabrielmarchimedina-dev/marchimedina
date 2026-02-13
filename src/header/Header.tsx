@@ -3,9 +3,55 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { headerData } from "./header.data";
+import { headerData, headerEnglishData } from "./header.data";
+import { useLanguage } from "@/hooks/client/useLanguage";
+
+// Componentes de bandeira
+function BrazilFlag({ className }: { className?: string }) {
+	return (
+		<svg viewBox="0 0 36 36" className={className}>
+			<path
+				fill="#009B3A"
+				d="M36 27a4 4 0 01-4 4H4a4 4 0 01-4-4V9a4 4 0 014-4h28a4 4 0 014 4v18z"
+			/>
+			<path fill="#FEDF01" d="M32.728 18L18 29.124 3.272 18 18 6.876z" />
+			<circle fill="#002776" cx="18" cy="18" r="6.5" />
+			<path
+				fill="#CBE9D4"
+				d="M12.277 14.887a6.5 6.5 0 00-.672 2.023c3.995-.29 9.417 1.891 11.744 4.595.402-.604.7-1.28.883-2.004-2.872-2.808-7.917-4.63-11.955-4.614z"
+			/>
+		</svg>
+	);
+}
+
+function UKFlag({ className }: { className?: string }) {
+	return (
+		<svg viewBox="0 0 36 36" className={className}>
+			<path
+				fill="#00247D"
+				d="M0 9.059V27a4 4 0 004 4h28a4 4 0 004-4V9a4 4 0 00-4-4H4a4 4 0 00-4 4v.059z"
+			/>
+			<path
+				fill="#CF1B2B"
+				d="M19 18v-4h9.062l-9 4H19zm17-4h-6l-9 4v-4h6l9.062-4H36v4zm0 4h-6l-9 4v-4h6l9-4v4zm-17 4v4H9.938l9-4H19zM0 22h6l9-4v4H9l-9.062 4H0v-4zm0-4h6l9-4v4H9L-.062 14H0v4z"
+			/>
+			<path
+				fill="#EEE"
+				d="M36 21h-3l-9 4v-4h-3v11h-6V21h-3l-9 4v-4H0v-6h3l9-4v4h3V4h6v11h3l9-4v4h3v6z"
+			/>
+			<path
+				fill="#CF1B2B"
+				d="M36 18v-2h-7l7-3v-2h-9l9 4v1h-2l-9 4h2v-2zm-21 0v2h-7l7 3v2H6l9-4v-1h-2l9.062-4H15v2z"
+			/>
+			<path fill="#EEE" d="M36 21v-6H21V4h-6v11H0v6h15v11h6V21z" />
+			<path fill="#CF1B2B" d="M36 17v2H20v13h-4V19H0v-2h16V4h4v13z" />
+		</svg>
+	);
+}
 
 export default function Header() {
+	const { language, setLanguage } = useLanguage();
+	const data = language === "en" ? headerEnglishData : headerData;
 	const pathname = usePathname();
 	const isHome = pathname === "/";
 	const [scrollSection, setScrollSection] = useState("");
@@ -105,41 +151,56 @@ export default function Header() {
 						className="text-xl sm:text-2xl font-semibold tracking-wide text-gold transition-colors"
 					>
 						<div className="flex flex-col items-center">
-							<p>{headerData.agencyName}</p>
-							<p className="text-base">
-								{headerData.agencyTagline}
-							</p>
+							<p>{data.agencyName}</p>
+							<p className="text-base">{data.agencyTagline}</p>
 						</div>
 					</Link>
 
 					{/* Menu Desktop */}
-					<nav className="hidden md:flex gap-6 lg:gap-10 text-base lg:text-lg font-medium text-gold">
+					<nav className="hidden md:flex gap-6 lg:gap-10 text-base lg:text-lg font-medium text-gold items-center">
 						<a
 							href={isHome ? "#servicos" : "/#servicos"}
 							className={getLinkClassName("servicos")}
 						>
-							{headerData.services}
+							{data.services}
 						</a>
 						{hasArticles && (
 							<a
 								href={isHome ? "#blog" : "/#blog"}
 								className={getLinkClassName("blog")}
 							>
-								{headerData.blog}
+								{data.blog}
 							</a>
 						)}
 						<a
 							href={isHome ? "#contato" : "/#contato"}
 							className={getLinkClassName("contato")}
 						>
-							{headerData.contact}
+							{data.contact}
 						</a>
 						<a
 							href="/equipe"
 							className={getLinkClassName("equipe")}
 						>
-							{headerData.team}
+							{data.team}
 						</a>
+						{/* Botões de idioma */}
+						<div className="flex gap-2 ml-4">
+							<button
+								onClick={() => setLanguage("pt")}
+								className={`w-7 h-7 rounded-full overflow-hidden transition-all ${language === "pt" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
+								title="Português"
+							>
+								<BrazilFlag className="w-full h-full" />
+							</button>
+							<button
+								onClick={() => setLanguage("en")}
+								className={`w-7 h-7 rounded-full overflow-hidden transition-all ${language === "en" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
+								title="English"
+							>
+								<UKFlag className="w-full h-full" />
+							</button>
+						</div>
 					</nav>
 
 					{/* Botão Hamburger Mobile */}
@@ -174,7 +235,7 @@ export default function Header() {
 							onClick={handleLinkClick}
 							className="hover:text-gold-light transition-colors"
 						>
-							{headerData.services}
+							{data.services}
 						</a>
 						{hasArticles && (
 							<a
@@ -182,7 +243,7 @@ export default function Header() {
 								onClick={handleLinkClick}
 								className="hover:text-gold-light transition-colors"
 							>
-								{headerData.blog}
+								{data.blog}
 							</a>
 						)}
 						<a
@@ -190,14 +251,31 @@ export default function Header() {
 							onClick={handleLinkClick}
 							className="hover:text-gold-light transition-colors"
 						>
-							{headerData.contact}
+							{data.contact}
 						</a>
 						<a
 							href="/equipe"
 							className="hover:text-gold-light transition-colors"
 						>
-							{headerData.team}
+							{data.team}
 						</a>
+						{/* Botões de idioma mobile */}
+						<div className="flex gap-3 mt-4">
+							<button
+								onClick={() => setLanguage("pt")}
+								className={`w-8 h-8 rounded-full overflow-hidden transition-all ${language === "pt" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
+								title="Português"
+							>
+								<BrazilFlag className="w-full h-full" />
+							</button>
+							<button
+								onClick={() => setLanguage("en")}
+								className={`w-8 h-8 rounded-full overflow-hidden transition-all ${language === "en" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
+								title="English"
+							>
+								<UKFlag className="w-full h-full" />
+							</button>
+						</div>
 					</nav>
 				</div>
 

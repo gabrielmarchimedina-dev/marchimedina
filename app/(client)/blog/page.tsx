@@ -1,7 +1,9 @@
 import BlogCard from "@/components/client/blogSection/BlogCard";
+import BlogPageHeader, {
+	BlogPageEmpty,
+} from "@/components/client/blogSection/BlogPageHeader";
 import article from "models/article";
 import { Article as ClientArticle } from "@/types/blog/article.type";
-import { blogPageStaticData } from "./blog.data";
 
 export const dynamic = "force-dynamic";
 
@@ -36,24 +38,10 @@ export default async function BlogPage() {
 	return (
 		<main className="min-h-screen bg-background text-textPrimary pt-28 pb-16">
 			<div className="mx-auto max-w-5xl px-4">
-				<header className="mb-10 text-center md:mb-14">
-					<p className="text-xs uppercase tracking-[0.3em] text-gold mb-3">
-						{blogPageStaticData.label}
-					</p>
-
-					<h1 className="text-3xl md:text-4xl font-semibold text-gold mb-4">
-						{blogPageStaticData.title}
-					</h1>
-
-					<p className="text-sm md:text-base text-textSecondary max-w-3xl mx-auto">
-						{blogPageStaticData.description}
-					</p>
-				</header>
+				<BlogPageHeader />
 
 				{serializedPosts.length === 0 ? (
-					<div className="rounded-xl border border-white/10 bg-white/[0.03] p-10 text-center text-textSecondary">
-						{blogPageStaticData.noArticleMessage}
-					</div>
+					<BlogPageEmpty />
 				) : (
 					<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 						{serializedPosts.map((post, index) => (
