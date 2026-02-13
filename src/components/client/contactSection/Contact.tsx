@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useScrollAnimation } from "@/hooks/client/useScrollAnimation";
+import { contactSectionData } from "./contact.data";
 
 export default function ContactSection() {
 	const { ref, isVisible } = useScrollAnimation(0.2);
@@ -20,24 +21,22 @@ export default function ContactSection() {
           `}
 				>
 					<p className="text-xs tracking-[0.2em] sm:tracking-[0.3em] uppercase text-gold mb-3">
-						Contato
+						{contactSectionData.label}
 					</p>
 
 					<h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gold mb-4 px-2">
-						Pronto para uma orientação jurídica especializada?
+						{contactSectionData.title}
 					</h2>
 
 					<p className="text-textSecondary mb-8 sm:mb-10 max-w-2xl mx-auto text-sm md:text-base px-4">
-						Entre em contato com nossa equipe e agende uma consulta
-						para avaliar suas necessidades com segurança, clareza e
-						discrição.
+						{contactSectionData.subtitle}
 					</p>
 
 					{/* Botões */}
 					<div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6 px-4">
 						{/* WhatsApp */}
 						<a
-							href="https://wa.me/5544999999999"
+							href="https://wa.me/5544991041002"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="
@@ -47,7 +46,7 @@ export default function ContactSection() {
                 transition hover:bg-gold-light hover:shadow-gold/50
               "
 						>
-							Falar no WhatsApp
+							{contactSectionData.whatsAppButtonText}
 						</a>
 
 						{/* Ir para página de contato */}
@@ -59,31 +58,25 @@ export default function ContactSection() {
                 text-gold hover:bg-gold/10 transition
               "
 						>
-							Enviar e-mail
+							{contactSectionData.emailButtonText}
 						</Link>
 					</div>
 
 					{/* Info rápida de contato */}
-					<div className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-sm text-textSecondary px-4">
+					<div className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm text-textSecondary px-4">
 						<div>
 							<p className="font-semibold text-textPrimary mb-1">
-								Telefone
+								{contactSectionData.phoneLabel}
 							</p>
-							<p>(44) 99999-9999</p>
+							<p>{contactSectionData.phoneNumber}</p>
 						</div>
 						<div>
 							<p className="font-semibold text-textPrimary mb-1">
-								E-mail
+								{contactSectionData.emailLabel}
 							</p>
 							<p className="break-all">
-								contato@marchimedina.com
+								{contactSectionData.emailAddress}
 							</p>
-						</div>
-						<div>
-							<p className="font-semibold text-textPrimary mb-1">
-								Atendimento
-							</p>
-							<p>Seg a Sex, 9h às 18h</p>
 						</div>
 					</div>
 				</div>
