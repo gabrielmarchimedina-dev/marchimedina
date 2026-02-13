@@ -57,7 +57,8 @@ export default function NewArticlePage() {
 			}
 		}
 		document.addEventListener("mousedown", handleClickOutside);
-		return () => document.removeEventListener("mousedown", handleClickOutside);
+		return () =>
+			document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
 
 	async function handleSubmit(e: React.FormEvent) {
@@ -73,7 +74,10 @@ export default function NewArticlePage() {
 			submitFormData.append("active", formData.active ? "true" : "false");
 			submitFormData.append("language", formData.language);
 			if (selectedAuthors.length > 0) {
-				submitFormData.append("authors", JSON.stringify(selectedAuthors));
+				submitFormData.append(
+					"authors",
+					JSON.stringify(selectedAuthors),
+				);
 			}
 
 			if (selectedFile) {
@@ -152,7 +156,6 @@ export default function NewArticlePage() {
 	const selectedAuthorNames = teamMembers
 		.filter((m) => selectedAuthors.includes(m.id))
 		.map((m) => m.name);
-	}
 
 	return (
 		<div>
@@ -394,7 +397,10 @@ export default function NewArticlePage() {
 							</select>
 						</div>
 
-						<div ref={authorDropdownRef} style={{ position: "relative" }}>
+						<div
+							ref={authorDropdownRef}
+							style={{ position: "relative" }}
+						>
 							<label
 								style={{
 									display: "block",
@@ -407,14 +413,19 @@ export default function NewArticlePage() {
 								Autores
 							</label>
 							<div
-								onClick={() => setAuthorDropdownOpen(!authorDropdownOpen)}
+								onClick={() =>
+									setAuthorDropdownOpen(!authorDropdownOpen)
+								}
 								style={{
 									width: "100%",
 									padding: "0.75rem",
 									background: "#0a0a0a",
 									border: "1px solid #333",
 									borderRadius: "6px",
-									color: selectedAuthors.length > 0 ? "#ededed" : "#666",
+									color:
+										selectedAuthors.length > 0
+											? "#ededed"
+											: "#666",
 									fontSize: "1rem",
 									cursor: "pointer",
 									minHeight: "46px",
@@ -445,7 +456,9 @@ export default function NewArticlePage() {
 											type="text"
 											placeholder="Buscar por nome..."
 											value={authorSearch}
-											onChange={(e) => setAuthorSearch(e.target.value)}
+											onChange={(e) =>
+												setAuthorSearch(e.target.value)
+											}
 											onClick={(e) => e.stopPropagation()}
 											style={{
 												width: "100%",
@@ -462,22 +475,29 @@ export default function NewArticlePage() {
 									{filteredTeamMembers.map((member) => (
 										<div
 											key={member.id}
-											onClick={() => toggleAuthor(member.id)}
+											onClick={() =>
+												toggleAuthor(member.id)
+											}
 											style={{
 												padding: "0.75rem 1rem",
 												display: "flex",
 												alignItems: "center",
 												gap: "0.75rem",
 												cursor: "pointer",
-												background: selectedAuthors.includes(member.id)
-													? "#2a2a2a"
-													: "transparent",
+												background:
+													selectedAuthors.includes(
+														member.id,
+													)
+														? "#2a2a2a"
+														: "transparent",
 												borderBottom: "1px solid #222",
 											}}
 										>
 											<input
 												type="checkbox"
-												checked={selectedAuthors.includes(member.id)}
+												checked={selectedAuthors.includes(
+													member.id,
+												)}
 												onChange={() => {}}
 												style={{
 													width: "16px",
@@ -486,7 +506,9 @@ export default function NewArticlePage() {
 													cursor: "pointer",
 												}}
 											/>
-											<span style={{ color: "#ededed" }}>{member.name}</span>
+											<span style={{ color: "#ededed" }}>
+												{member.name}
+											</span>
 										</div>
 									))}
 									{filteredTeamMembers.length === 0 && (
