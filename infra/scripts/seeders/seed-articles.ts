@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import article from "models/article";
-import user from "models/user";
 import { CreateArticleInput } from "models/article/types";
 require("dotenv").config({ path: ".env.development" });
 
@@ -15,21 +14,15 @@ const THUMBNAILS = [
 	"client/assets/images/mockBlog/thumb-post-6.jpg",
 ];
 
-async function resolveAdminUserId(): Promise<string | null> {
-	try {
-		const adminUser = await user.findOneByEmail("admin@mm.com");
-		return adminUser?.id ?? null;
-	} catch (error: any) {
-		if (error.statusCode !== 404) {
-			throw error;
-		}
-		return null;
-	}
-}
+const LANGUAGES: Array<"portugues" | "ingles" | "frances"> = [
+	"portugues",
+	"ingles",
+	"frances",
+];
 
 function buildArticle(
 	index: number,
-	createdBy: string | null,
+	language: "portugues" | "ingles" | "frances",
 ): CreateArticleInput {
 	const title = faker.lorem.sentence({ min: 3, max: 6 }).replace(/\.$/, "");
 	const subtitle = faker.lorem
@@ -45,20 +38,23 @@ function buildArticle(
 		text,
 		view_count: faker.number.int({ min: 0, max: 120 }),
 		active: true,
-		created_by: createdBy,
-		updated_by: createdBy,
+		language,
 	};
 }
 
 async function seedArticles() {
 	try {
-		const createdBy = await resolveAdminUserId();
 		const createdArticles: CreateArticleInput[] = [];
 
-		for (let i = 1; i <= 6; i += 1) {
-			const newArticle = buildArticle(i, createdBy);
-			await article.create(newArticle);
-			createdArticles.push(newArticle);
+		for (const language of LANGUAGES) {
+			for (let i = 1; i <= 7; i += 1) {
+				const newArticle = buildArticle(
+					createdArticles.length + 1,
+					language,
+				);
+				await article.create(newArticle);
+				createdArticles.push(newArticle);
+			}
 		}
 
 		console.log(`✅ ${createdArticles.length} artigos criados.`);

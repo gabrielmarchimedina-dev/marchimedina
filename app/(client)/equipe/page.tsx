@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useScrollAnimation } from "@/hooks/client/useScrollAnimation";
+import { useLanguage } from "@/hooks/client/useLanguage";
 import { FaInstagram, FaLinkedin } from "react-icons/fa";
 import Image from "next/image";
 import { getImageSrc } from "@/lib/imageUrl";
+import { teamStaticData, teamStaticEnglishData } from "./team.data";
 
 type TeamMember = {
 	id: string;
@@ -23,6 +25,8 @@ type TeamMember = {
 };
 
 export default function AboutSection() {
+	const { language } = useLanguage();
+	const data = language === "en" ? teamStaticEnglishData : teamStaticData;
 	const { ref, isVisible } = useScrollAnimation(0.2);
 	const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -62,28 +66,25 @@ export default function AboutSection() {
 			<div className="mx-auto max-w-5xl px-4">
 				<header className="mb-10 text-center md:mb-14">
 					<p className="text-xs uppercase tracking-[0.3em] text-gold">
-						Conheça o time
+						{data.label}
 					</p>
 
 					<h2 className="mt-3 text-3xl font-semibold text-gold md:text-4xl">
-						Profissionais qualificados
+						{data.title}
 					</h2>
 
 					<p className="mt-4 text-sm text-textSecondary md:text-base max-w-3xl mx-auto">
-						Contamos com uma equipe de profissionais dedicados e
-						experientes, comprometidos em oferecer atendimento
-						jurídico estratégico, ético e personalizado para cada
-						cliente.
+						{data.description}
 					</p>
 				</header>
 
 				<h3 className="mt-12 mb-8 text-2xl font-semibold text-gold md:text-3xl text-center">
-					Equipe
+					{data.team}
 				</h3>
 
 				{loading ? (
 					<p className="text-center text-textSecondary">
-						Carregando equipe...
+						{data.loadingTeam}
 					</p>
 				) : (
 					<div
@@ -147,7 +148,7 @@ export default function AboutSection() {
 										}
 										className="mt-4 inline-flex items-center justify-center rounded-full border border-gold px-4 py-2 text-sm font-medium text-gold transition hover:bg-gold/10"
 									>
-										Ver currículo
+										{data.viewProfile}
 									</button>
 								</div>
 							</div>
@@ -193,7 +194,7 @@ export default function AboutSection() {
 								onClick={() => setSelectedMember(null)}
 								className="text-textSecondary transition hover:text-gold"
 							>
-								Fechar
+								{data.close}
 							</button>
 						</div>
 
@@ -201,7 +202,7 @@ export default function AboutSection() {
 							{selectedMember.bio && (
 								<div>
 									<p className="text-xs uppercase tracking-[0.2em] text-gold">
-										Bio
+										{data.bio}
 									</p>
 									<p className="mt-2 text-textPrimary">
 										{selectedMember.bio}
@@ -212,7 +213,7 @@ export default function AboutSection() {
 								{selectedMember.oab_number && (
 									<div>
 										<p className="text-xs uppercase tracking-[0.2em] text-gold">
-											OAB
+											{data.oab}
 										</p>
 										<p className="mt-1 text-textPrimary">
 											{selectedMember.oab_number}
@@ -222,7 +223,7 @@ export default function AboutSection() {
 								{selectedMember.email && (
 									<div>
 										<p className="text-xs uppercase tracking-[0.2em] text-gold">
-											Email
+											{data.email}
 										</p>
 										<p className="mt-1 text-textPrimary">
 											{selectedMember.email}
@@ -232,7 +233,7 @@ export default function AboutSection() {
 								{selectedMember.education && (
 									<div>
 										<p className="text-xs uppercase tracking-[0.2em] text-gold">
-											Formação
+											{data.education}
 										</p>
 										<p className="mt-1 text-textPrimary">
 											{selectedMember.education}
@@ -242,7 +243,7 @@ export default function AboutSection() {
 								{selectedMember.languages?.length ? (
 									<div>
 										<p className="text-xs uppercase tracking-[0.2em] text-gold">
-											Idiomas
+											{data.languages}
 										</p>
 										<p className="mt-1 text-textPrimary">
 											{selectedMember.languages.join(
@@ -254,7 +255,7 @@ export default function AboutSection() {
 								{selectedMember.lattes_url && (
 									<div>
 										<p className="text-xs uppercase tracking-[0.2em] text-gold">
-											Currículo Lattes
+											{data.lattes}
 										</p>
 										<a
 											href={selectedMember.lattes_url}
@@ -262,7 +263,7 @@ export default function AboutSection() {
 											rel="noopener noreferrer"
 											className="mt-1 inline-flex text-textPrimary underline decoration-gold/60 underline-offset-4"
 										>
-											Abrir currículo
+											{data.openLattes}
 										</a>
 									</div>
 								)}
@@ -276,7 +277,7 @@ export default function AboutSection() {
 										rel="noopener noreferrer"
 										className="text-gold hover:text-gold-light"
 									>
-										Instagram
+										{data.instagram}
 									</a>
 								)}
 								{selectedMember.linkedin && (
@@ -286,7 +287,7 @@ export default function AboutSection() {
 										rel="noopener noreferrer"
 										className="text-gold hover:text-gold-light"
 									>
-										LinkedIn
+										{data.linkedin}
 									</a>
 								)}
 							</div>

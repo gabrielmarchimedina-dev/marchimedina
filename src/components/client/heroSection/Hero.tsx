@@ -3,20 +3,23 @@
 import Image from "next/image";
 import { useTypewriter } from "@/hooks/client/useTypewriter";
 import { useScrollAnimation } from "@/hooks/client/useScrollAnimation";
-import { heroData } from "./hero.data";
+import { useLanguage } from "@/hooks/client/useLanguage";
+import { heroData, heroEnglishData } from "./hero.data";
 
 export default function Hero() {
+	const { language } = useLanguage();
+	const data = language === "en" ? heroEnglishData : heroData;
 	const { ref, isVisible } = useScrollAnimation(0.3);
 	const typedTitle = useTypewriter(
-		heroData.title,
-		heroData.typingSpeed,
+		data.title,
+		data.typingSpeed,
 		0,
 		isVisible,
 	);
 	const typedSubtitle = useTypewriter(
-		heroData.subtitle,
-		heroData.subtitleSpeed,
-		heroData.totalDelay,
+		data.subtitle,
+		data.subtitleSpeed,
+		data.totalDelay,
 		isVisible,
 	);
 	return (

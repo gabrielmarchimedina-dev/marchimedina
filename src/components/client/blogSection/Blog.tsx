@@ -2,11 +2,21 @@
 
 import BlogCard from "./BlogCard";
 import { useScrollAnimation } from "@/hooks/client/useScrollAnimation";
+import { useLanguage } from "@/hooks/client/useLanguage";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Article } from "@/types/blog/article.type";
+import {
+	blogSectionStaticData,
+	blogSectionEnglishStaticData,
+} from "./blog.data";
 
 export default function BlogSection() {
+	const { language } = useLanguage();
+	const data =
+		language === "en"
+			? blogSectionEnglishStaticData
+			: blogSectionStaticData;
 	const { ref, isVisible } = useScrollAnimation(0.2);
 	const [articles, setArticles] = useState<Article[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -65,16 +75,15 @@ export default function BlogSection() {
 				{/* HEADER */}
 				<header className="mb-10 text-center md:mb-14">
 					<p className="text-xs uppercase tracking-[0.3em] text-gold">
-						Conteúdo
+						{data.label}
 					</p>
 
 					<h2 className="mt-3 text-3xl font-semibold text-gold md:text-4xl">
-						Artigos e Publicações
+						{data.title}
 					</h2>
 
 					<p className="mt-4 text-sm text-textSecondary md:text-base max-w-3xl mx-auto">
-						Acompanhe análises, orientações e informações jurídicas
-						desenvolvidas por nossos profissionais.
+						{data.subtitle}
 					</p>
 				</header>
 
@@ -103,7 +112,7 @@ export default function BlogSection() {
               hover:bg-gold hover:text-black transition-colors
             "
 					>
-						Ver todos os artigos
+						{data.showAllButtonText}
 					</Link>
 				</div>
 			</div>

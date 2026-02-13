@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Article } from "@/types/blog/article.type";
 import { createArticleSlug } from "@/lib/client/articleSlug";
+import { useLanguage } from "@/hooks/client/useLanguage";
+import { blogCardStaticData, blogCardStaticEnglishData } from "./blogCard.data";
 
 type BlogCardProps = {
 	post: Article;
@@ -25,6 +27,9 @@ function buildExcerpt(post: Article) {
 }
 
 export default function BlogCard({ post, index, isVisible }: BlogCardProps) {
+	const { language } = useLanguage();
+	const data =
+		language === "en" ? blogCardStaticEnglishData : blogCardStaticData;
 	const thumbnailSrc = post.thumbnail
 		? post.thumbnail.match(/^(https?:\/\/|data:|blob:)/)
 			? post.thumbnail
@@ -63,7 +68,7 @@ export default function BlogCard({ post, index, isVisible }: BlogCardProps) {
 				</p>
 
 				<span className="mt-auto pt-4 inline-block text-gold text-sm font-medium">
-					Ler mais →
+					{data.readMore} →
 				</span>
 			</div>
 		</Link>

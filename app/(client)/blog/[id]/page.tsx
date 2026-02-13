@@ -1,11 +1,15 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import { getArticleIdFromSlug } from "@/lib/client/articleSlug";
 import article from "models/article";
 import teamMember from "models/teamMember";
 import { getImageSrc } from "@/lib/imageUrl";
 import { FaInstagram, FaLinkedin } from "react-icons/fa";
+import {
+	ArticleBackLink,
+	ArticleLabel,
+	ArticleAuthorsLabel,
+} from "@/components/client/blogSection/ArticlePageComponents";
 
 export const dynamic = "force-dynamic";
 
@@ -74,20 +78,11 @@ export default async function PostPage({ params }: PostPageProps) {
 		<main className="min-h-screen bg-background text-textPrimary pt-28 pb-16">
 			<article className="mx-auto max-w-3xl px-4">
 				{/* CATEGORIA / VOLTAR */}
-				<div className="mb-4 text-sm text-textSecondary">
-					<Link
-						href="/blog"
-						className="hover:text-gold transition-colors"
-					>
-						← Voltar para o blog
-					</Link>
-				</div>
+				<ArticleBackLink />
 
 				{/* TÍTULO */}
 				<header className="mb-8">
-					<p className="text-xs uppercase tracking-[0.3em] text-gold mb-3">
-						Artigo
-					</p>
+					<ArticleLabel />
 
 					<h1 className="text-3xl md:text-4xl font-semibold text-textPrimary mb-3">
 						{articleRecord.title}
@@ -126,9 +121,7 @@ export default async function PostPage({ params }: PostPageProps) {
 				{/* AUTORES */}
 				{authors.length > 0 && (
 					<div className="mt-12 pt-8 border-t border-white/10">
-						<h3 className="text-lg font-semibold text-gold mb-6">
-							{authors.length === 1 ? "Autor" : "Autores"}
-						</h3>
+						<ArticleAuthorsLabel count={authors.length} />
 						<div className="grid gap-6 sm:grid-cols-2">
 							{authors.map((author) => (
 								<div

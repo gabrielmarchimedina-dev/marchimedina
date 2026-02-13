@@ -2,8 +2,13 @@
 
 import Link from "next/link";
 import { FaInstagram, FaLinkedin, FaFacebook } from "react-icons/fa";
+import { useLanguage } from "@/hooks/client/useLanguage";
+import { footerData, footerEnglishData } from "./footer.data";
 
 export default function Footer() {
+	const { language } = useLanguage();
+	const data = language === "en" ? footerEnglishData : footerData;
+
 	return (
 		<footer className="w-full bg-black text-textSecondary border-t border-white/10">
 			<div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
@@ -12,10 +17,10 @@ export default function Footer() {
 					{/* Marca */}
 					<div className="text-center md:text-left">
 						<h3 className="text-gold text-lg sm:text-xl font-semibold tracking-wide">
-							Marchi Medina
+							{data.agencyName}
 						</h3>
 						<p className="text-xs sm:text-sm mt-2 text-textSecondary">
-							Excelência jurídica com transparência e ética.
+							{data.agencyTagline}
 						</p>
 					</div>
 
@@ -25,25 +30,25 @@ export default function Footer() {
 							href="#servicos"
 							className="hover:text-gold transition-colors"
 						>
-							Serviços
+							{data.services}
 						</Link>
 						<Link
 							href="#sobre"
 							className="hover:text-gold transition-colors"
 						>
-							Sobre
+							{data.about}
 						</Link>
 						<Link
 							href="/blog"
 							className="hover:text-gold transition-colors"
 						>
-							Blog
+							{data.blog}
 						</Link>
 						<Link
 							href="#contato"
 							className="hover:text-gold transition-colors"
 						>
-							Contato
+							{data.contact}
 						</Link>
 					</nav>
 
@@ -65,14 +70,6 @@ export default function Footer() {
 						>
 							<FaLinkedin />
 						</a>
-						<a
-							href="https://facebook.com"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="hover:text-gold transition-colors"
-						>
-							<FaFacebook />
-						</a>
 					</div>
 				</div>
 
@@ -81,8 +78,7 @@ export default function Footer() {
 
 				{/* COPYRIGHT */}
 				<div className="text-center text-xs text-textSecondary mt-4 sm:mt-6">
-					© {new Date().getFullYear()} Marchi Medina — Todos os
-					direitos reservados.
+					© {new Date().getFullYear()} {data.rights}
 				</div>
 			</div>
 		</footer>

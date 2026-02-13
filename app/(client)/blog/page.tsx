@@ -1,4 +1,5 @@
-import BlogCard from "@/components/client/blogSection/BlogCard";
+import BlogPageHeader from "@/components/client/blogSection/BlogPageHeader";
+import BlogListWithFilter from "@/components/client/blogSection/BlogListWithFilter";
 import article from "models/article";
 import { Article as ClientArticle } from "@/types/blog/article.type";
 
@@ -22,6 +23,7 @@ export default async function BlogPage() {
 		text: item.text,
 		thumbnail: item.thumbnail,
 		active: item.active,
+		language: item.language,
 		created_at:
 			item.created_at instanceof Date
 				? item.created_at.toISOString()
@@ -35,38 +37,8 @@ export default async function BlogPage() {
 	return (
 		<main className="min-h-screen bg-background text-textPrimary pt-28 pb-16">
 			<div className="mx-auto max-w-5xl px-4">
-				<header className="mb-10 text-center md:mb-14">
-					<p className="text-xs uppercase tracking-[0.3em] text-gold mb-3">
-						Blog
-					</p>
-
-					<h1 className="text-3xl md:text-4xl font-semibold text-gold mb-4">
-						Todos os artigos
-					</h1>
-
-					<p className="text-sm md:text-base text-textSecondary max-w-3xl mx-auto">
-						Explore nossos conteúdos sobre contratos, direito
-						empresarial e outros temas jurídicos relevantes para o
-						seu dia a dia.
-					</p>
-				</header>
-
-				{serializedPosts.length === 0 ? (
-					<div className="rounded-xl border border-white/10 bg-white/[0.03] p-10 text-center text-textSecondary">
-						Nenhum artigo publicado ainda.
-					</div>
-				) : (
-					<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-						{serializedPosts.map((post, index) => (
-							<BlogCard
-								key={post.id}
-								post={post}
-								index={index}
-								isVisible={true}
-							/>
-						))}
-					</div>
-				)}
+				<BlogPageHeader />
+				<BlogListWithFilter posts={serializedPosts} />
 			</div>
 		</main>
 	);

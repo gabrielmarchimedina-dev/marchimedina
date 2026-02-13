@@ -1,47 +1,58 @@
+import { redirect } from "next/navigation";
+
+// TODO: Descomentar quando o serviço de e-mail estiver pronto
+// import { useLanguage } from "@/hooks/client/useLanguage";
+// import { contactStaticData, contactStaticEnglishData } from "./contact.data";
+
 export default function ContactPage() {
+	// Página desabilitada temporariamente - redireciona para home
+	redirect("/");
+
+	/* TODO: Descomentar quando o serviço de e-mail estiver pronto
+	const { language } = useLanguage();
+	const data =
+		language === "en" ? contactStaticEnglishData : contactStaticData;
+
 	return (
 		<main className="min-h-screen bg-background text-textPrimary pt-28 pb-16">
 			<div className="mx-auto max-w-3xl px-6">
 				<header className="mb-10 text-center">
 					<p className="text-xs uppercase tracking-[0.3em] text-gold mb-3">
-						Contato
+						{data.label}
 					</p>
 
 					<h1 className="text-3xl md:text-4xl font-semibold text-gold mb-4">
-						Enviar uma mensagem
+						{data.title}
 					</h1>
 
 					<p className="text-sm md:text-base text-textSecondary max-w-xl mx-auto">
-						Preencha os dados abaixo e entraremos em contato para
-						entender melhor sua necessidade e avaliar a melhor forma
-						de auxiliá-lo.
+						{data.description}
 					</p>
 				</header>
 
-				{/* Formulário simples demonstrativo */}
 				<form className="space-y-6">
 					<div className="flex flex-col gap-2">
 						<label htmlFor="name" className="text-sm font-medium">
-							Nome completo
+							{data.nameInput}
 						</label>
 						<input
 							id="name"
 							name="name"
 							className="rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm outline-none focus:border-gold"
-							placeholder="Digite seu nome"
+							placeholder={data.nameInputPlaceholder}
 						/>
 					</div>
 
 					<div className="flex flex-col gap-2">
 						<label htmlFor="email" className="text-sm font-medium">
-							E-mail
+							{data.emailInput}
 						</label>
 						<input
 							id="email"
 							name="email"
 							type="email"
 							className="rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm outline-none focus:border-gold"
-							placeholder="seuemail@exemplo.com"
+							placeholder={data.emailInputPlaceholder}
 						/>
 					</div>
 
@@ -50,14 +61,14 @@ export default function ContactPage() {
 							htmlFor="message"
 							className="text-sm font-medium"
 						>
-							Mensagem
+							{data.messageInput}
 						</label>
 						<textarea
 							id="message"
 							name="message"
 							rows={4}
 							className="rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm outline-none focus:border-gold resize-none"
-							placeholder="Conte brevemente como podemos ajudar"
+							placeholder={data.messageInputPlaceholder}
 						/>
 					</div>
 
@@ -65,16 +76,15 @@ export default function ContactPage() {
 						type="submit"
 						className="mt-4 inline-flex items-center justify-center rounded-full bg-gold px-8 py-3 text-sm font-semibold text-black shadow-md shadow-gold/30 transition hover:bg-gold-light hover:shadow-gold/50"
 					>
-						Enviar mensagem
+						{data.sendButtonMessage}
 					</button>
 				</form>
 
-				{/* Texto de rodapé opcional */}
 				<p className="mt-8 text-center text-xs text-textSecondary">
-					As informações enviadas serão utilizadas exclusivamente para
-					retorno do contato.
+					{data.messageReason}
 				</p>
 			</div>
 		</main>
 	);
+	*/
 }
