@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { headerData } from "./header.data";
 
 export default function Header() {
 	const pathname = usePathname();
@@ -104,8 +105,10 @@ export default function Header() {
 						className="text-xl sm:text-2xl font-semibold tracking-wide text-gold transition-colors"
 					>
 						<div className="flex flex-col items-center">
-							<p>Marchi Medina</p>
-							<p className="text-base">Advocacia</p>
+							<p>{headerData.agencyName}</p>
+							<p className="text-base">
+								{headerData.agencyTagline}
+							</p>
 						</div>
 					</Link>
 
@@ -115,27 +118,27 @@ export default function Header() {
 							href={isHome ? "#servicos" : "/#servicos"}
 							className={getLinkClassName("servicos")}
 						>
-							Serviços
+							{headerData.services}
 						</a>
 						{hasArticles && (
 							<a
 								href={isHome ? "#blog" : "/#blog"}
 								className={getLinkClassName("blog")}
 							>
-								Blog
+								{headerData.blog}
 							</a>
 						)}
 						<a
 							href={isHome ? "#contato" : "/#contato"}
 							className={getLinkClassName("contato")}
 						>
-							Contato
+							{headerData.contact}
 						</a>
 						<a
 							href="/equipe"
 							className={getLinkClassName("equipe")}
 						>
-							Equipe
+							{headerData.team}
 						</a>
 					</nav>
 
@@ -171,7 +174,7 @@ export default function Header() {
 							onClick={handleLinkClick}
 							className="hover:text-gold-light transition-colors"
 						>
-							Serviços
+							{headerData.services}
 						</a>
 						{hasArticles && (
 							<a
@@ -179,7 +182,7 @@ export default function Header() {
 								onClick={handleLinkClick}
 								className="hover:text-gold-light transition-colors"
 							>
-								Blog
+								{headerData.blog}
 							</a>
 						)}
 						<a
@@ -187,13 +190,13 @@ export default function Header() {
 							onClick={handleLinkClick}
 							className="hover:text-gold-light transition-colors"
 						>
-							Contato
+							{headerData.contact}
 						</a>
 						<a
 							href="/equipe"
 							className="hover:text-gold-light transition-colors"
 						>
-							Equipe
+							{headerData.team}
 						</a>
 					</nav>
 				</div>

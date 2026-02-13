@@ -1,5 +1,5 @@
-import Header from "@/components/client/Header";
-import Footer from "@/components/client/Footer";
+import Header from "@/header/Header";
+import Footer from "@/components/client/footer/Footer";
 import "./globals.css";
 
 export default function ClientLayout({

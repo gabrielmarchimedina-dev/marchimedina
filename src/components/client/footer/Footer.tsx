@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FaInstagram, FaLinkedin, FaFacebook } from "react-icons/fa";
+import { footerData } from "./footer.data";
 
 export default function Footer() {
 	return (
@@ -12,10 +13,10 @@ export default function Footer() {
 					{/* Marca */}
 					<div className="text-center md:text-left">
 						<h3 className="text-gold text-lg sm:text-xl font-semibold tracking-wide">
-							Marchi Medina
+							{footerData.agencyName}
 						</h3>
 						<p className="text-xs sm:text-sm mt-2 text-textSecondary">
-							Excelência jurídica com transparência e ética.
+							{footerData.agencyTagline}
 						</p>
 					</div>
 
@@ -25,25 +26,25 @@ export default function Footer() {
 							href="#servicos"
 							className="hover:text-gold transition-colors"
 						>
-							Serviços
+							{footerData.services}
 						</Link>
 						<Link
 							href="#sobre"
 							className="hover:text-gold transition-colors"
 						>
-							Sobre
+							{footerData.about}
 						</Link>
 						<Link
 							href="/blog"
 							className="hover:text-gold transition-colors"
 						>
-							Blog
+							{footerData.blog}
 						</Link>
 						<Link
 							href="#contato"
 							className="hover:text-gold transition-colors"
 						>
-							Contato
+							{footerData.contact}
 						</Link>
 					</nav>
 
@@ -81,8 +82,7 @@ export default function Footer() {
 
 				{/* COPYRIGHT */}
 				<div className="text-center text-xs text-textSecondary mt-4 sm:mt-6">
-					© {new Date().getFullYear()} Marchi Medina — Todos os
-					direitos reservados.
+					© {new Date().getFullYear()} - {footerData.rights}
 				</div>
 			</div>
 		</footer>
