@@ -5,6 +5,7 @@ import { useScrollAnimation } from "@/hooks/client/useScrollAnimation";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Article } from "@/types/blog/article.type";
+import { blogSectionStaticData } from "./blog.data";
 
 export default function BlogSection() {
 	const { ref, isVisible } = useScrollAnimation(0.2);
@@ -65,16 +66,15 @@ export default function BlogSection() {
 				{/* HEADER */}
 				<header className="mb-10 text-center md:mb-14">
 					<p className="text-xs uppercase tracking-[0.3em] text-gold">
-						Conteúdo
+						{blogSectionStaticData.label}
 					</p>
 
 					<h2 className="mt-3 text-3xl font-semibold text-gold md:text-4xl">
-						Artigos e Publicações
+						{blogSectionStaticData.title}
 					</h2>
 
 					<p className="mt-4 text-sm text-textSecondary md:text-base max-w-3xl mx-auto">
-						Acompanhe análises, orientações e informações jurídicas
-						desenvolvidas por nossos profissionais.
+						{blogSectionStaticData.subtitle}
 					</p>
 				</header>
 
@@ -103,7 +103,7 @@ export default function BlogSection() {
               hover:bg-gold hover:text-black transition-colors
             "
 					>
-						Ver todos os artigos
+						{blogSectionStaticData.showAllButtonText}
 					</Link>
 				</div>
 			</div>
