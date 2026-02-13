@@ -1,5 +1,5 @@
 import ServiceCard from "./ServiceCard";
-import services from "./services.data";
+import { services, serviceSectionHeader } from "./services.data";
 
 export default function Services() {
 	return (
@@ -10,14 +10,13 @@ export default function Services() {
 			<div className="mx-auto max-w-5xl px-4">
 				<header className="mb-10 text-center md:mb-14">
 					<p className="text-xs uppercase tracking-[0.3em] text-gold">
-						Atuação
+						{serviceSectionHeader.label}
 					</p>
 					<h2 className="mt-3 text-3xl font-semibold text-gold md:text-4xl">
-						Áreas de atuação
+						{serviceSectionHeader.title}
 					</h2>
 					<p className="mt-4 text-sm text-textSecondary md:text-base">
-						Descubra nossas especializações e conte com um
-						acompanhamento jurídico estratégico e personalizado.
+						{serviceSectionHeader.subtitle}
 					</p>
 				</header>
 

@@ -1,6 +1,20 @@
 import { Service } from "./services.types";
 
-const services: Service[] = [
+export const serviceSectionHeader = {
+	label: "Atuação",
+	title: "Áreas de atuação",
+	subtitle:
+		"Descubra nossas especializações e conte com um acompanhamento jurídico estratégico e personalizado.",
+};
+
+export const serviceSectionEnglishHeader = {
+	label: "Practice Areas",
+	title: "Areas of Expertise",
+	subtitle:
+		"Discover our specializations and count on strategic and personalized legal support.",
+};
+
+export const services: Service[] = [
 	{
 		id: 1,
 		title: "Direito Empresarial e Societário",
@@ -39,4 +53,41 @@ const services: Service[] = [
 	},
 ];
 
-export default services;
+export const englishServices: Service[] = [
+	{
+		id: 1,
+		title: "Corporate and Business Law",
+		description:
+			"Continuous legal advisory for companies, corporate structuring, and support in strategic decisions.",
+	},
+	{
+		id: 2,
+		title: "Contracts and Negotiations",
+		description:
+			"Drafting, reviewing, and negotiating civil and business contracts, with a focus on legal security.",
+	},
+	{
+		id: 3,
+		title: "Civil Law and Liability",
+		description:
+			"Handling conflicts involving obligations, civil liability, indemnities, and contractual disputes.",
+	},
+	{
+		id: 4,
+		title: "Consumer Law",
+		description:
+			"Defense of companies in individual and collective claims and guidance on consumer practices.",
+	},
+	{
+		id: 5,
+		title: "Labor Law for Businesses",
+		description:
+			"Preventive and contentious guidance in labor relations, internal policies, and labor litigation.",
+	},
+	{
+		id: 6,
+		title: "Preventive Consulting and Compliance",
+		description:
+			"Implementation of governance, compliance, and risk management policies to avoid future litigation.",
+	},
+];
