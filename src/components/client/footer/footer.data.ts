@@ -6,6 +6,7 @@ export const footerData = {
 	blog: "Blog",
 	contact: "Contato",
 	rights: "Marchi Medina - Todos os direitos reservados.",
+	madeBy: "Feito por: Said Chama",
 };
 
 export const footerEnglishData = {
@@ -16,4 +17,5 @@ export const footerEnglishData = {
 	blog: "Blog",
 	contact: "Contact",
 	rights: "Marchi Medina - All rights reserved.",
+	madeBy: "Made by: Said Chama",
 };
