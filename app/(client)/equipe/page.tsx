@@ -146,7 +146,7 @@ export default function AboutSection() {
 										onClick={() =>
 											setSelectedMember(member)
 										}
-										className="mt-4 inline-flex items-center justify-center rounded-full border border-gold px-4 py-2 text-sm font-medium text-gold transition hover:bg-gold/10"
+										className="mt-4 inline-flex items-center justify-center rounded-full border border-gold px-4 py-2 text-sm font-medium text-gold transition hover:bg-gold/10 cursor-pointer"
 									>
 										{data.viewProfile}
 									</button>
@@ -192,7 +192,7 @@ export default function AboutSection() {
 							<button
 								type="button"
 								onClick={() => setSelectedMember(null)}
-								className="text-textSecondary transition hover:text-gold"
+								className="text-textSecondary transition hover:text-gold cursor-pointer"
 							>
 								{data.close}
 							</button>

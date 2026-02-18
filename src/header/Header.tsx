@@ -24,27 +24,29 @@ function BrazilFlag({ className }: { className?: string }) {
 	);
 }
 
-function UKFlag({ className }: { className?: string }) {
+function USAFlag({ className }: { className?: string }) {
 	return (
 		<svg viewBox="0 0 36 36" className={className}>
 			<path
-				fill="#00247D"
-				d="M0 9.059V27a4 4 0 004 4h28a4 4 0 004-4V9a4 4 0 00-4-4H4a4 4 0 00-4 4v.059z"
+				fill="#B22234"
+				d="M35.445 7C34.752 5.809 33.477 5 32 5H4c-1.477 0-2.752.809-3.445 2h34.89z"
 			/>
+			<path fill="#EEE" d="M0 9.5h36V12H0z" />
+			<path fill="#B22234" d="M0 12h36v2.5H0z" />
+			<path fill="#EEE" d="M0 14.5h36V17H0z" />
+			<path fill="#B22234" d="M0 17h36v2.5H0z" />
+			<path fill="#EEE" d="M0 19.5h36V22H0z" />
+			<path fill="#B22234" d="M0 22h36v2.5H0z" />
+			<path fill="#EEE" d="M0 24.5h36V27H0z" />
 			<path
-				fill="#CF1B2B"
-				d="M19 18v-4h9.062l-9 4H19zm17-4h-6l-9 4v-4h6l9.062-4H36v4zm0 4h-6l-9 4v-4h6l9-4v4zm-17 4v4H9.938l9-4H19zM0 22h6l9-4v4H9l-9.062 4H0v-4zm0-4h6l9-4v4H9L-.062 14H0v4z"
+				fill="#B22234"
+				d="M0 27v.333C0 29.355 1.645 31 3.667 31h28.666C34.355 31 36 29.355 36 27.333V27H0z"
 			/>
+			<path fill="#3C3B6E" d="M0 7c0-1.105.672-2 1.5-2H18v12H0V7z" />
 			<path
-				fill="#EEE"
-				d="M36 21h-3l-9 4v-4h-3v11h-6V21h-3l-9 4v-4H0v-6h3l9-4v4h3V4h6v11h3l9-4v4h3v6z"
+				fill="#FFF"
+				d="M1.5 8.5l.5 1h1l-.8.6.3 1-.9-.7-.9.7.3-1-.8-.6h1zm3 0l.5 1h1l-.8.6.3 1-.9-.7-.9.7.3-1-.8-.6h1zm3 0l.5 1h1l-.8.6.3 1-.9-.7-.9.7.3-1-.8-.6h1zm3 0l.5 1h1l-.8.6.3 1-.9-.7-.9.7.3-1-.8-.6h1zm3 0l.5 1h1l-.8.6.3 1-.9-.7-.9.7.3-1-.8-.6h1zm3 0l.5 1h1l-.8.6.3 1-.9-.7-.9.7.3-1-.8-.6h1zm-13.5 3l.5 1h1l-.8.6.3 1-.9-.7-.9.7.3-1-.8-.6h1zm3 0l.5 1h1l-.8.6.3 1-.9-.7-.9.7.3-1-.8-.6h1zm3 0l.5 1h1l-.8.6.3 1-.9-.7-.9.7.3-1-.8-.6h1zm3 0l.5 1h1l-.8.6.3 1-.9-.7-.9.7.3-1-.8-.6h1zm3 0l.5 1h1l-.8.6.3 1-.9-.7-.9.7.3-1-.8-.6h1z"
 			/>
-			<path
-				fill="#CF1B2B"
-				d="M36 18v-2h-7l7-3v-2h-9l9 4v1h-2l-9 4h2v-2zm-21 0v2h-7l7 3v2H6l9-4v-1h-2l9.062-4H15v2z"
-			/>
-			<path fill="#EEE" d="M36 21v-6H21V4h-6v11H0v6h15v11h6V21z" />
-			<path fill="#CF1B2B" d="M36 17v2H20v13h-4V19H0v-2h16V4h4v13z" />
 		</svg>
 	);
 }
@@ -188,17 +190,17 @@ export default function Header() {
 						<div className="flex gap-2 ml-4">
 							<button
 								onClick={() => setLanguage("pt")}
-								className={`w-7 h-7 rounded-full overflow-hidden transition-all ${language === "pt" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
+								className={`w-7 h-7 rounded-full overflow-hidden transition-all cursor-pointer ${language === "pt" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
 								title="Português"
 							>
 								<BrazilFlag className="w-full h-full" />
 							</button>
 							<button
 								onClick={() => setLanguage("en")}
-								className={`w-7 h-7 rounded-full overflow-hidden transition-all ${language === "en" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
+								className={`w-7 h-7 rounded-full overflow-hidden transition-all cursor-pointer ${language === "en" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
 								title="English"
 							>
-								<UKFlag className="w-full h-full" />
+								<USAFlag className="w-full h-full" />
 							</button>
 						</div>
 					</nav>
@@ -263,17 +265,17 @@ export default function Header() {
 						<div className="flex gap-3 mt-4">
 							<button
 								onClick={() => setLanguage("pt")}
-								className={`w-8 h-8 rounded-full overflow-hidden transition-all ${language === "pt" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
+								className={`w-8 h-8 rounded-full overflow-hidden transition-all cursor-pointer ${language === "pt" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
 								title="Português"
 							>
 								<BrazilFlag className="w-full h-full" />
 							</button>
 							<button
 								onClick={() => setLanguage("en")}
-								className={`w-8 h-8 rounded-full overflow-hidden transition-all ${language === "en" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
+								className={`w-8 h-8 rounded-full overflow-hidden transition-all cursor-pointer ${language === "en" ? "ring-2 ring-gold scale-110" : "opacity-60 hover:opacity-100"}`}
 								title="English"
 							>
-								<UKFlag className="w-full h-full" />
+								<USAFlag className="w-full h-full" />
 							</button>
 						</div>
 					</nav>
