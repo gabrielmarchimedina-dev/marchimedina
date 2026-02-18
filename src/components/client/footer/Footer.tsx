@@ -81,6 +81,9 @@ export default function Footer() {
 				<div className="text-center text-xs text-textSecondary mt-4 sm:mt-6">
 					© {new Date().getFullYear()} {data.rights}
 				</div>
+				<div className="text-center text-xs text-textSecondary mt-4 sm:mt-6">
+					{data.madeBy}
+				</div>
 			</div>
 		</footer>
 	);
