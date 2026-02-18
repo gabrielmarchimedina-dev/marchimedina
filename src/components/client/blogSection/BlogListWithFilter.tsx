@@ -42,7 +42,7 @@ export default function BlogListWithFilter({ posts }: BlogListWithFilterProps) {
 						key={btn.value}
 						onClick={() => setFilter(btn.value)}
 						className={`
-							px-4 py-2 rounded-full text-sm font-medium transition-all
+							px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer
 							${
 								filter === btn.value
 									? "bg-gold text-black"
