@@ -55,7 +55,8 @@ export default function Header() {
 	const { language, setLanguage } = useLanguage();
 	const data = language === "en" ? headerEnglishData : headerData;
 	const pathname = usePathname();
-	const isHome = pathname === "/";
+	const langPrefix = `/${language}`;
+	const isHome = pathname === `/${language}` || pathname === "/";
 	const [scrollSection, setScrollSection] = useState("");
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [hasArticles, setHasArticles] = useState(false);
@@ -149,7 +150,7 @@ export default function Header() {
 			<header className="fixed top-0 left-0 z-50 w-full bg-black/30 backdrop-blur-md">
 				<div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5">
 					<Link
-						href="/"
+						href={langPrefix}
 						className="text-xl sm:text-2xl font-semibold tracking-wide text-gold transition-colors"
 					>
 						<div className="flex flex-col items-center">
@@ -161,27 +162,29 @@ export default function Header() {
 					{/* Menu Desktop */}
 					<nav className="hidden md:flex gap-6 lg:gap-10 text-base lg:text-lg font-medium text-gold items-center">
 						<a
-							href={isHome ? "#servicos" : "/#servicos"}
+							href={
+								isHome ? "#servicos" : `${langPrefix}#servicos`
+							}
 							className={getLinkClassName("servicos")}
 						>
 							{data.services}
 						</a>
 						{hasArticles && (
 							<a
-								href={isHome ? "#blog" : "/#blog"}
+								href={isHome ? "#blog" : `${langPrefix}#blog`}
 								className={getLinkClassName("blog")}
 							>
 								{data.blog}
 							</a>
 						)}
 						<a
-							href={isHome ? "#contato" : "/#contato"}
+							href={isHome ? "#contato" : `${langPrefix}#contato`}
 							className={getLinkClassName("contato")}
 						>
 							{data.contact}
 						</a>
 						<a
-							href="/equipe"
+							href={`${langPrefix}/equipe`}
 							className={getLinkClassName("equipe")}
 						>
 							{data.team}
@@ -233,7 +236,9 @@ export default function Header() {
 				>
 					<nav className="flex flex-col gap-8 px-8 pt-24 text-lg font-medium text-gold">
 						<a
-							href={isHome ? "#servicos" : "/#servicos"}
+							href={
+								isHome ? "#servicos" : `${langPrefix}#servicos`
+							}
 							onClick={handleLinkClick}
 							className="hover:text-gold-light transition-colors"
 						>
@@ -241,7 +246,7 @@ export default function Header() {
 						</a>
 						{hasArticles && (
 							<a
-								href={isHome ? "#blog" : "/#blog"}
+								href={isHome ? "#blog" : `${langPrefix}#blog`}
 								onClick={handleLinkClick}
 								className="hover:text-gold-light transition-colors"
 							>
@@ -249,14 +254,14 @@ export default function Header() {
 							</a>
 						)}
 						<a
-							href={isHome ? "#contato" : "/#contato"}
+							href={isHome ? "#contato" : `${langPrefix}#contato`}
 							onClick={handleLinkClick}
 							className="hover:text-gold-light transition-colors"
 						>
 							{data.contact}
 						</a>
 						<a
-							href="/equipe"
+							href={`${langPrefix}/equipe`}
 							className="hover:text-gold-light transition-colors"
 						>
 							{data.team}

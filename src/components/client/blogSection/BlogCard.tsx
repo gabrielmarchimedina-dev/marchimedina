@@ -30,6 +30,7 @@ export default function BlogCard({ post, index, isVisible }: BlogCardProps) {
 	const { language } = useLanguage();
 	const data =
 		language === "en" ? blogCardStaticEnglishData : blogCardStaticData;
+	const langPrefix = `/${language}`;
 	const thumbnailSrc = post.thumbnail
 		? post.thumbnail.match(/^(https?:\/\/|data:|blob:)/)
 			? post.thumbnail
@@ -40,7 +41,7 @@ export default function BlogCard({ post, index, isVisible }: BlogCardProps) {
 
 	return (
 		<Link
-			href={`/blog/${createArticleSlug(post)}`}
+			href={`${langPrefix}/blog/${createArticleSlug(post)}`}
 			style={{ animationDelay: `${index * 120}ms` }}
 			className={`
 				animate-on-scroll ${isVisible ? "visible" : ""}

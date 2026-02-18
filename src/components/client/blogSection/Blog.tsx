@@ -17,6 +17,7 @@ export default function BlogSection() {
 		language === "en"
 			? blogSectionEnglishStaticData
 			: blogSectionStaticData;
+	const langPrefix = `/${language}`;
 	const { ref, isVisible } = useScrollAnimation(0.2);
 	const [articles, setArticles] = useState<Article[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -105,7 +106,7 @@ export default function BlogSection() {
 				{/* BOTÃO VER TODOS */}
 				<div className="mt-10 flex justify-center">
 					<Link
-						href="/blog"
+						href={`${langPrefix}/blog`}
 						className="
               inline-flex items-center rounded-full border border-gold 
               px-6 py-2 text-sm font-medium text-gold 

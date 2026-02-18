@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { FaInstagram, FaLinkedin, FaFacebook } from "react-icons/fa";
+import { FaInstagram, FaLinkedin } from "react-icons/fa";
 import { useLanguage } from "@/hooks/client/useLanguage";
 import { footerData, footerEnglishData } from "./footer.data";
 
 export default function Footer() {
 	const { language } = useLanguage();
 	const data = language === "en" ? footerEnglishData : footerData;
+	const langPrefix = `/${language}`;
 
 	return (
 		<footer className="w-full bg-black text-textSecondary border-t border-white/10">
@@ -27,25 +28,25 @@ export default function Footer() {
 					{/* Navegação */}
 					<nav className="flex flex-wrap justify-center gap-4 sm:gap-6 text-xs sm:text-sm">
 						<Link
-							href="#servicos"
+							href={`${langPrefix}#servicos`}
 							className="hover:text-gold transition-colors"
 						>
 							{data.services}
 						</Link>
 						<Link
-							href="#sobre"
+							href={`${langPrefix}#sobre`}
 							className="hover:text-gold transition-colors"
 						>
 							{data.about}
 						</Link>
 						<Link
-							href="/blog"
+							href={`${langPrefix}/blog`}
 							className="hover:text-gold transition-colors"
 						>
 							{data.blog}
 						</Link>
 						<Link
-							href="#contato"
+							href={`${langPrefix}#contato`}
 							className="hover:text-gold transition-colors"
 						>
 							{data.contact}

@@ -18,9 +18,28 @@ const playfair = Playfair_Display({
 	weight: ["400", "500", "600", "700"],
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://marchimedina.com";
+
 export const metadata: Metadata = {
-	title: "Marchi Medina",
-	description: "Advocacia e Consultoria",
+	title: {
+		default: "Marchi Medina",
+		template: "%s | Marchi Medina",
+	},
+	keywords: [
+		"advocacia",
+		"advogado",
+		"consultoria jurídica",
+		"direito empresarial",
+		"Marchi Medina",
+		"law firm",
+		"legal consulting",
+	],
+	authors: [{ name: "Marchi Medina Advocacia" }],
+	robots: {
+		index: true,
+		follow: true,
+	},
+	metadataBase: new URL(baseUrl),
 };
 
 export default function RootLayout({
@@ -29,7 +48,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="pt-BR">
+		<html suppressHydrationWarning>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${playfair.className} antialiased`}
 				style={{
