@@ -4,7 +4,7 @@ import { useLanguage } from "@/hooks/client/useLanguage";
 import {
 	blogPageStaticData,
 	blogPageStaticEnglishData,
-} from "../../../../app/(client)/blog/blog.data";
+} from "../../../../app/[lang]/blog/blog.data";
 
 export default function BlogPageHeader() {
 	const { language } = useLanguage();

@@ -6,7 +6,7 @@ import { useLanguage } from "@/hooks/client/useLanguage";
 import {
 	blogPageStaticData,
 	blogPageStaticEnglishData,
-} from "../../../../app/(client)/blog/blog.data";
+} from "../../../../app/[lang]/blog/blog.data";
 import { Article, ArticleLanguage } from "@/types/blog/article.type";
 
 type FilterOption = "all" | ArticleLanguage;

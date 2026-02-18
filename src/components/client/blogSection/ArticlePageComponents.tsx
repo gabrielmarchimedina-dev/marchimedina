@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
 	articlePageStaticData,
 	articlePageStaticEnglishData,
-} from "../../../../app/(client)/blog/[id]/article.data";
+} from "../../../../app/[lang]/blog/[id]/article.data";
 
 export function ArticleBackLink() {
 	const { language } = useLanguage();
@@ -13,10 +13,14 @@ export function ArticleBackLink() {
 		language === "en"
 			? articlePageStaticEnglishData
 			: articlePageStaticData;
+	const langPrefix = `/${language}`;
 
 	return (
 		<div className="mb-4 text-sm text-textSecondary">
-			<Link href="/blog" className="hover:text-gold transition-colors">
+			<Link
+				href={`${langPrefix}/blog`}
+				className="hover:text-gold transition-colors"
+			>
 				← {data.back}
 			</Link>
 		</div>
