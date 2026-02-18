@@ -18,7 +18,8 @@ const playfair = Playfair_Display({
 	weight: ["400", "500", "600", "700"],
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://marchimedina.com";
+const baseUrl =
+	process.env.NEXT_PUBLIC_SITE_URL || "https://marchimedina.com.br";
 
 export const metadata: Metadata = {
 	title: {

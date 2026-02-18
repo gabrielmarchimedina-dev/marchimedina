@@ -3,7 +3,7 @@ import article from "models/article";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const baseUrl =
-		process.env.NEXT_PUBLIC_SITE_URL || "https://marchimedina.com";
+		process.env.NEXT_PUBLIC_SITE_URL || "https://marchimedina.com.br";
 	const locales = ["pt", "en"];
 
 	// Static pages for each locale

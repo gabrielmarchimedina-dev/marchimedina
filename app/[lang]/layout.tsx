@@ -10,7 +10,8 @@ type Props = {
 	params: Promise<{ lang: string }>;
 };
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://marchimedina.com";
+const baseUrl =
+	process.env.NEXT_PUBLIC_SITE_URL || "https://marchimedina.com.br";
 
 const metadata = {
 	pt: {
