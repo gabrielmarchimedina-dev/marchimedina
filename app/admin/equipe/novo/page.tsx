@@ -336,6 +336,16 @@ export default function NewTeamMemberPage() {
 								outline: "none",
 							}}
 						/>
+						<p
+							style={{
+								fontSize: "0.75rem",
+								color: "#6b7280",
+								marginTop: "0.375rem",
+							}}
+						>
+							Recomendado: 800 × 1000px, formato retrato (JPG ou
+							PNG)
+						</p>
 						{previewUrl && (
 							<div style={{ marginTop: "1rem" }}>
 								<Image

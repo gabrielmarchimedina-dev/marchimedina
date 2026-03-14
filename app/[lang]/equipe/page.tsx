@@ -103,12 +103,12 @@ export default function AboutSection() {
                                 hover:-translate-y-2 hover:border-gold 
                                 hover:shadow-lg hover:shadow-gold/20`}
 							>
-								<div className="relative h-64 w-full overflow-hidden">
+								<div className="relative h-72 w-full overflow-hidden bg-white/5">
 									<Image
 										src={getImageSrc(member.image_url)}
 										alt={member.name}
 										fill
-										className="object-cover transition-transform duration-300 group-hover:scale-105"
+										className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
 									/>
 								</div>
 
