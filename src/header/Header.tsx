@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { headerData, headerEnglishData } from "./header.data";
 import { useLanguage } from "@/hooks/client/useLanguage";
 
@@ -148,19 +149,24 @@ export default function Header() {
 	return (
 		<>
 			<header className="fixed top-0 left-0 z-50 w-full bg-black/30 backdrop-blur-md">
-				<div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5">
-					<Link
-						href={langPrefix}
-						className="text-xl sm:text-2xl font-semibold tracking-wide text-gold transition-colors"
-					>
-						<div className="flex flex-col items-center">
-							<p>{data.agencyName}</p>
-							<p className="text-base">{data.agencyTagline}</p>
-						</div>
+				<div className="flex items-center justify-between px-4 sm:px-6 py-2 sm:py-3">
+					<Link href={langPrefix}>
+						<Image
+							src="/logo.png"
+							alt={data.agencyName}
+							width={160}
+							height={56}
+							priority
+							style={{
+								height: "56px",
+								width: "auto",
+								filter: "brightness(0) saturate(100%) invert(67%) sepia(58%) saturate(600%) hue-rotate(5deg) brightness(102%) contrast(96%)",
+							}}
+						/>
 					</Link>
 
 					{/* Menu Desktop */}
-					<nav className="hidden md:flex gap-6 lg:gap-10 text-base lg:text-lg font-medium text-gold items-center">
+					<nav className="hidden md:flex gap-6 lg:gap-10 text-lg lg:text-xl font-medium text-gold items-center">
 						<a
 							href={
 								isHome ? "#servicos" : `${langPrefix}#servicos`
