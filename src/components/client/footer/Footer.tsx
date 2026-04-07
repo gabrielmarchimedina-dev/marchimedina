@@ -56,7 +56,7 @@ export default function Footer() {
 					{/* Redes sociais */}
 					<div className="flex gap-4 sm:gap-5 text-lg sm:text-xl">
 						<a
-							href="https://instagram.com"
+							href="https://www.instagram.com/josegabriel.medina.adv/"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="hover:text-gold transition-colors"
@@ -64,7 +64,7 @@ export default function Footer() {
 							<FaInstagram />
 						</a>
 						<a
-							href="https://linkedin.com"
+							href="https://www.linkedin.com/in/jos%C3%A9-gabriel-marchi-medina-912059198/"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="hover:text-gold transition-colors"
