@@ -96,12 +96,12 @@ export default function AboutSection() {
 								key={member.id}
 								style={{ animationDelay: `${index * 120}ms` }}
 								className={`
-                                animate-on-scroll ${isVisible ? "visible" : ""}
-                                group overflow-hidden rounded-xl 
-                                border border-white/10 bg-white/[0.03]
-                                shadow-sm transition w-full max-w-sm
-                                hover:-translate-y-2 hover:border-gold 
-                                hover:shadow-lg hover:shadow-gold/20`}
+								animate-on-scroll ${isVisible ? "visible" : ""}
+								group overflow-hidden rounded-xl
+								border border-white/10 bg-white/[0.03]
+								shadow-sm transition w-full max-w-sm
+								hover:-translate-y-2 hover:border-gold
+								hover:shadow-lg hover:shadow-gold/20`}
 							>
 								<div className="relative h-72 w-full overflow-hidden bg-white/5">
 									<Image
